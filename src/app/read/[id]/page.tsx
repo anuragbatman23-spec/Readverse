@@ -222,7 +222,7 @@ function ReaderContent() {
             )) ||
           cachedParsed.chapters?.some(
             (c: Chapter) =>
-              c.content && c.content.some((url: string) => typeof url === 'string' && url.includes('unsplash.com'))
+              c.content && c.content.some((url: string) => typeof url === 'string' && (url.includes('unsplash.com') || url.includes('Loaded custom EPUB file')))
           ) ||
           (cachedParsed.title?.toLowerCase().includes('short comic') &&
             cachedParsed.chapters?.some((c: Chapter) => c.id?.includes('kingdom') || c.title?.toLowerCase().includes('kingdom')));
@@ -230,6 +230,11 @@ function ReaderContent() {
         if (!isDummyCache) {
           finishLoading(cachedParsed);
           return;
+        } else {
+          try {
+            localStorage.removeItem(`readverse_book_${bookId}`);
+            localStorage.removeItem(`readverse_book_${rawId}`);
+          } catch {}
         }
       }
     } catch {
