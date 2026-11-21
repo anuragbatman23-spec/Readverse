@@ -36,7 +36,8 @@ export async function queryD1<T = any>(sql: string, params: any[] = []): Promise
     body: JSON.stringify({
       sql,
       params
-    })
+    }),
+    cache: 'no-store'
   });
 
   if (!response.ok) {
@@ -83,7 +84,8 @@ export async function executeD1(sql: string, params: any[] = []): Promise<{ succ
     body: JSON.stringify({
       sql,
       params
-    })
+    }),
+    cache: 'no-store'
   });
 
   if (!response.ok) {

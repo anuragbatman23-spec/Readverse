@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getStorageMedia } from '@/lib/d1Client';
+import { getStorageMedia, queryD1 } from '@/lib/d1Client';
 import fs from 'fs';
 import path from 'path';
 
@@ -18,8 +18,15 @@ export async function GET(request: Request) {
     // 1. Fetch media from Cloudflare D1
     let d1Error: any = null;
     let media = null;
+    let rawRows: any = null;
     try {
-      media = await getStorageMedia(id);
+      rawRows = await queryD1('SELECT content_type, data FROM storage_objects WHERE key = ? LIMIT 1', [id]);
+      if (rawRows && rawRows.length > 0 && rawRows[0].data) {
+        media = {
+          contentType: rawRows[0].content_type || 'image/jpeg',
+          buffer: Buffer.from(rawRows[0].data, 'base64')
+        };
+      }
     } catch (err: any) {
       d1Error = err?.message || String(err);
       console.error('[Image API] D1 lookup error:', err);
@@ -39,11 +46,11 @@ export async function GET(request: Request) {
       return NextResponse.json({
         error: 'Image not found',
         id,
+        rawRowsCount: rawRows ? rawRows.length : null,
+        rawRowKeys: rawRows && rawRows[0] ? Object.keys(rawRows[0]) : null,
         mediaFound: Boolean(media),
         d1Error,
-        hasEnvToken: Boolean(process.env.CLOUDFLARE_API_TOKEN),
-        d1DbId: process.env.CLOUDFLARE_D1_DATABASE_ID || 'default',
-        cfAccId: process.env.CLOUDFLARE_ACCOUNT_ID || 'default'
+        hasEnvToken: Boolean(process.env.CLOUDFLARE_API_TOKEN)
       }, { status: 404 });
     }
 
