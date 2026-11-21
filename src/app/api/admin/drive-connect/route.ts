@@ -1,12 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(req: NextRequest) {
   const url = new URL(req.url);
-  const redirectUri = `${url.origin}/api/auth/callback/google`;
+  const redirectUri = `${url.origin}/api/admin/drive-callback`;
   const clientId = process.env.GOOGLE_CLIENT_ID || "";
 
   if (!clientId) {
-    return NextResponse.json({ error: "Missing GOOGLE_CLIENT_ID environment variable" }, { status: 500 });
+    return NextResponse.json({ error: "Missing GOOGLE_CLIENT_ID" }, { status: 500 });
   }
 
   const googleAuthUrl = new URL("https://accounts.google.com/o/oauth2/v2/auth");
@@ -16,7 +18,6 @@ export async function GET(req: NextRequest) {
   googleAuthUrl.searchParams.set("scope", "https://www.googleapis.com/auth/drive.file email profile openid");
   googleAuthUrl.searchParams.set("access_type", "offline");
   googleAuthUrl.searchParams.set("prompt", "consent");
-  googleAuthUrl.searchParams.set("state", "admin_drive_link");
 
   return NextResponse.redirect(googleAuthUrl.toString());
 }
