@@ -227,7 +227,16 @@ export const ProfileView: React.FC = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const targetUserParam = searchParams?.get('user') || null;
+  const driveConnectedParam = searchParams?.get('drive_connected') || null;
   const { stats, books, activeBook, setActiveBook } = useApp();
+
+  useEffect(() => {
+    if (driveConnectedParam === 'true') {
+      alert('✅ Centralized Google Drive connected successfully! EPUB uploads will now automatically save to your Google Drive folder.');
+    } else if (driveConnectedParam === 'already_linked') {
+      alert('✅ Google Drive was already linked.');
+    }
+  }, [driveConnectedParam]);
 
   // 0.5-second initial loading state for all data coming from users.json
   const [isUserDataLoading, setIsUserDataLoading] = useState(true);
