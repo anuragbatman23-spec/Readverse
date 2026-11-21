@@ -156,19 +156,15 @@ export async function saveStorageMedia(key: string, contentType: string, buffer:
 }
 
 export async function getStorageMedia(key: string): Promise<{ contentType: string; buffer: Buffer } | null> {
-  try {
-    const rows = await queryD1<{ content_type: string; data: string }>(
-      'SELECT content_type, data FROM storage_objects WHERE key = ? LIMIT 1',
-      [key]
-    );
-    if (rows && rows.length > 0 && rows[0].data) {
-      return {
-        contentType: rows[0].content_type || 'image/jpeg',
-        buffer: Buffer.from(rows[0].data, 'base64')
-      };
-    }
-  } catch (err) {
-    console.warn(`[D1] getStorageMedia failed for key "${key}":`, err);
+  const rows = await queryD1<{ content_type: string; data: string }>(
+    'SELECT content_type, data FROM storage_objects WHERE key = ? LIMIT 1',
+    [key]
+  );
+  if (rows && rows.length > 0 && rows[0].data) {
+    return {
+      contentType: rows[0].content_type || 'image/jpeg',
+      buffer: Buffer.from(rows[0].data, 'base64')
+    };
   }
   return null;
 }

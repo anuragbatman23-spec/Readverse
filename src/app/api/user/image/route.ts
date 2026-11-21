@@ -22,6 +22,7 @@ export async function GET(request: Request) {
       media = await getStorageMedia(id);
     } catch (err: any) {
       d1Error = err?.message || String(err);
+      console.error('[Image API] D1 lookup error:', err);
     }
 
     if (media && media.buffer && media.buffer.length > 0) {
@@ -40,7 +41,9 @@ export async function GET(request: Request) {
         id,
         mediaFound: Boolean(media),
         d1Error,
-        hasEnvToken: Boolean(process.env.CLOUDFLARE_API_TOKEN)
+        hasEnvToken: Boolean(process.env.CLOUDFLARE_API_TOKEN),
+        d1DbId: process.env.CLOUDFLARE_D1_DATABASE_ID || 'default',
+        cfAccId: process.env.CLOUDFLARE_ACCOUNT_ID || 'default'
       }, { status: 404 });
     }
 
