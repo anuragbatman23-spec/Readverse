@@ -9,49 +9,29 @@ export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
-    const isDebug = searchParams.get('debug') === '1';
 
     if (!id || typeof id !== 'string' || !/^[a-zA-Z0-9_\-]+$/.test(id)) {
       return NextResponse.json({ error: 'Invalid or missing image ID' }, { status: 400 });
     }
 
     // 1. Fetch media from Cloudflare D1
-    let d1Error: any = null;
-    let media = null;
-    let rawRows: any = null;
     try {
-      rawRows = await queryD1('SELECT content_type, data FROM storage_objects WHERE key = ? LIMIT 1', [id]);
-      if (rawRows && rawRows.length > 0 && rawRows[0].data) {
-        media = {
-          contentType: rawRows[0].content_type || 'image/jpeg',
-          buffer: Buffer.from(rawRows[0].data, 'base64')
-        };
+      const rows = await queryD1<{ content_type: string; data: string }>(
+        'SELECT content_type, data FROM storage_objects WHERE key = ? LIMIT 1',
+        [id]
+      );
+      if (rows && rows.length > 0 && rows[0].data) {
+        const buffer = Buffer.from(rows[0].data, 'base64');
+        return new NextResponse(new Uint8Array(buffer), {
+          status: 200,
+          headers: {
+            'Content-Type': rows[0].content_type || 'image/jpeg',
+            'Cache-Control': 'public, max-age=31536000, immutable',
+          },
+        });
       }
     } catch (err: any) {
-      d1Error = err?.message || String(err);
       console.error('[Image API] D1 lookup error:', err);
-    }
-
-    if (media && media.buffer && media.buffer.length > 0) {
-      return new NextResponse(new Uint8Array(media.buffer), {
-        status: 200,
-        headers: {
-          'Content-Type': media.contentType || 'image/jpeg',
-          'Cache-Control': 'public, max-age=31536000, immutable',
-        },
-      });
-    }
-
-    if (isDebug) {
-      return NextResponse.json({
-        error: 'Image not found',
-        id,
-        rawRowsCount: rawRows ? rawRows.length : null,
-        rawRowKeys: rawRows && rawRows[0] ? Object.keys(rawRows[0]) : null,
-        mediaFound: Boolean(media),
-        d1Error,
-        hasEnvToken: Boolean(process.env.CLOUDFLARE_API_TOKEN)
-      }, { status: 404 });
     }
 
     // 2. Fallback check local filesystem if present (e.g. local dev uploads)
