@@ -697,22 +697,48 @@ export const BookOverviewPage: React.FC<BookOverviewPageProps> = ({
     });
   };
   const chaptersSectionRef = useRef<HTMLDivElement>(null);
+  const getInitialSources = (cat?: string, id?: string) => {
+    if (cat === 'book' || id?.startsWith('gutenberg-') || id?.startsWith('se-')) {
+      return [
+        { id: 'gutenberg', name: 'Project Gutenberg' },
+        { id: 'standardebooks', name: 'Standard Ebooks' }
+      ];
+    }
+    if (cat === 'webnovel' || cat === 'lightnovel' || id?.startsWith('ln-') || id?.startsWith('archive-ln-') || id?.startsWith('local-ln-')) {
+      return [
+        { id: 'novelbuddy', name: 'NovelBuddy' },
+        { id: 'archiveorg', name: 'Archive.org Official Release' },
+        { id: 'royalroad', name: 'Royal Road' }
+      ];
+    }
+    return [
+      { id: 'weebcentral', name: 'WeebCentral (HQ Scans)' },
+      { id: 'mangadistrict', name: 'MangaDistrict (Full Archive)' },
+      { id: 'toongod', name: 'ToonGod (Korean Manhwa)' },
+      { id: 'manhwabuddy', name: 'ManhwaBuddy (Manhwa Hub)' },
+      { id: 'flamecomics', name: 'Flame Comics (Elite Manhwa & Scans)' },
+      { id: 'tcbscans', name: 'TCB Scans (Ultra HQ Manga)' },
+      { id: 'webtoons', name: 'LINE Webtoons (Official Manhwa)' },
+      { id: 'mangapill', name: 'MangaPill (Fast Mirror)' },
+      { id: 'mangakatana', name: 'MangaKatana (Deep Archive)' },
+      { id: 'mangadex', name: 'MangaDex (Catalog)' }
+    ];
+  };
+
+  const getInitialSourceName = (cat?: string, id?: string) => {
+    if (cat === 'book' || id?.startsWith('gutenberg-') || id?.startsWith('se-')) return 'Project Gutenberg';
+    if (id?.startsWith('archive-ln-')) return 'Archive.org Official Release';
+    if (cat === 'webnovel' || cat === 'lightnovel') return 'NovelBuddy';
+    return 'Live Connected Mirror';
+  };
+
   const [isInReadlist, setIsInReadlist] = useState(false);
   const [showAltTitles, setShowAltTitles] = useState(false);
-  const [connectedSource, setConnectedSource] = useState<string>('auto');
-  const [connectedSourceName, setConnectedSourceName] = useState<string>('Live Connected Mirror');
-  const [availableSources, setAvailableSources] = useState<Array<{ id: string; name: string }>>([
-    { id: 'weebcentral', name: 'WeebCentral (HQ Scans)' },
-    { id: 'mangadistrict', name: 'MangaDistrict (Full Archive)' },
-    { id: 'toongod', name: 'ToonGod (Korean Manhwa)' },
-    { id: 'manhwabuddy', name: 'ManhwaBuddy (Manhwa Hub)' },
-    { id: 'flamecomics', name: 'Flame Comics (Elite Manhwa & Scans)' },
-    { id: 'tcbscans', name: 'TCB Scans (Ultra HQ Manga)' },
-    { id: 'webtoons', name: 'LINE Webtoons (Official Manhwa)' },
-    { id: 'mangapill', name: 'MangaPill (Fast Mirror)' },
-    { id: 'mangakatana', name: 'MangaKatana (Deep Archive)' },
-    { id: 'mangadex', name: 'MangaDex (Catalog)' }
-  ]);
+  const [connectedSource, setConnectedSource] = useState<string>(
+    book.category === 'book' ? 'gutenberg' : (book.category === 'webnovel' || book.category === 'lightnovel') ? (book.id.startsWith('archive-ln-') ? 'archiveorg' : 'novelbuddy') : 'weebcentral'
+  );
+  const [connectedSourceName, setConnectedSourceName] = useState<string>(getInitialSourceName(book.category, book.id));
+  const [availableSources, setAvailableSources] = useState<Array<{ id: string; name: string }>>(getInitialSources(book.category, book.id));
   const [isChangingSource, setIsChangingSource] = useState<boolean>(false);
   const [isSourcePickerOpen, setIsSourcePickerOpen] = useState<boolean>(false);
 
@@ -1003,17 +1029,22 @@ export const BookOverviewPage: React.FC<BookOverviewPageProps> = ({
     setIsLoadingChapters(true);
 
     try {
-      // 0. Local Books / Light Novels
-      if (book.id.startsWith('local-')) {
+      // 0. Local Books & Archive.org Cloud Streamed Light Novels
+      if (book.id.startsWith('local-') || book.id.startsWith('archive-ln-')) {
         const localRes = await fetch(`/api/books/local/read?bookId=${encodeURIComponent(book.id)}`);
         if (localRes.ok) {
           const data = await localRes.json();
           if (data.chapters && data.chapters.length > 0) {
             const sanitized = sanitizeChapters(data.chapters);
             setChapters(sanitized);
-            setConnectedSource('local');
-            setConnectedSourceName('Local Library');
-            setAvailableSources([{ id: 'local', name: 'Local File' }]);
+            const isArchive = book.id.startsWith('archive-ln-');
+            setConnectedSource(isArchive ? 'archiveorg' : 'local');
+            setConnectedSourceName(isArchive ? 'Archive.org Cloud Stream' : 'Local Library');
+            setAvailableSources(
+              isArchive
+                ? [{ id: 'archiveorg', name: 'Archive.org Official Release' }]
+                : [{ id: 'local', name: 'Local File' }]
+            );
             onChaptersLoaded?.(sanitized);
             setIsLoadingChapters(false);
             return;
@@ -1118,10 +1149,14 @@ export const BookOverviewPage: React.FC<BookOverviewPageProps> = ({
         if (data && data.chapters && data.chapters.length > 0 && !stillDummy) {
           const sanitized = sanitizeChapters(data.chapters);
           setChapters(sanitized);
-          setConnectedSource('webnovel-mirror');
-          setConnectedSourceName('LightNovel & WebNovel Mirror');
+          const srcId = data.source || (book.id.startsWith('archive-') ? 'archiveorg' : 'novelbuddy');
+          const srcName = data.sourceName || (srcId === 'novelbuddy' ? 'NovelBuddy' : srcId === 'archiveorg' ? 'Archive.org Official Release' : 'WebNovel & LightNovel Mirror');
+          setConnectedSource(srcId);
+          setConnectedSourceName(srcName);
           setAvailableSources([
-            { id: 'webnovel-mirror', name: 'WuxiaWorld / WebNovel Mirror' }
+            { id: 'novelbuddy', name: 'NovelBuddy' },
+            { id: 'archiveorg', name: 'Archive.org Official Release' },
+            { id: 'royalroad', name: 'Royal Road' }
           ]);
           onChaptersLoaded?.(sanitized);
           setIsLoadingChapters(false);

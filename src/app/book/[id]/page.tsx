@@ -165,8 +165,8 @@ export default function BookDetailsPage() {
 
     // 3. Resolve via specialized API routes according to ID prefix
     const resolveFromApi = async () => {
-      // A. Local Books / Light Novels
-      if (bookId.startsWith('local-') || rawId.startsWith('local-')) {
+      // A. Local Books / Light Novels / Archive.org Stream
+      if (bookId.startsWith('local-') || rawId.startsWith('local-') || bookId.startsWith('archive-ln-') || rawId.startsWith('archive-ln-')) {
         try {
           const localRes = await fetch(`/api/books/local/read?bookId=${encodeURIComponent(bookId)}`);
           if (localRes.ok) {
@@ -190,6 +190,7 @@ export default function BookDetailsPage() {
         bookId.startsWith('ln-') ||
         bookId.startsWith('wn-') ||
         bookId.startsWith('local-') ||
+        bookId.startsWith('archive-ln-') ||
         bookId.startsWith('gutenberg-') ||
         bookId.startsWith('se-') ||
         /^\d+$/.test(bookId) ||
@@ -259,9 +260,10 @@ export default function BookDetailsPage() {
       }
 
       // C. Classic Literature (Gutenberg / Standard Ebooks)
-      if (bookId.startsWith('gutenberg-') || bookId.startsWith('se-') || /^\d+$/.test(bookId)) {
+      if (bookId.startsWith('gutenberg-') || bookId.startsWith('se-') || /^\d+$/.test(bookId) || matchMeta?.category === 'book' || (bookId.startsWith('companion-') && /-b\d+/.test(bookId))) {
         try {
-          const bookRes = await fetch(`/api/books/read?bookId=${encodeURIComponent(bookId)}`);
+          const queryTitle = matchMeta?.title || '';
+          const bookRes = await fetch(`/api/books/read?bookId=${encodeURIComponent(bookId)}&title=${encodeURIComponent(queryTitle)}`);
           if (bookRes.ok) {
             const data = await bookRes.json();
             if (!isCancelled && data?.chapters && data.chapters.length > 0) {

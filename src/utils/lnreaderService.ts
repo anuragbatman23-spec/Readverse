@@ -562,10 +562,42 @@ export async function getNovelBuddyDetailsDirect(slug: string): Promise<Book | n
     const m = json.props?.pageProps?.initialManga;
     if (!m) return null;
 
-    const chapters: Chapter[] = (m.latestChapters || []).map((ch: any, idx: number) => ({
-      id: `nb-${m.slug}-ch-${idx + 1}`,
-      title: ch.name || `Chapter ${idx + 1}`,
-      chapterNumber: idx + 1,
+    let rawChapters: any[] = [];
+    if (m.id) {
+      try {
+        const chRes = await fetch(`https://api.novelbuddy.me/titles/${m.id}/chapters`, {
+          headers: {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) ReadVerse/1.0',
+            'Accept': 'application/json'
+          }
+        });
+        if (chRes.ok) {
+          const chData = await chRes.json();
+          if (chData.success && Array.isArray(chData.data?.chapters) && chData.data.chapters.length > 0) {
+            rawChapters = chData.data.chapters;
+          }
+        }
+      } catch (e) {
+        console.warn('NovelBuddy full chapters API fetch failed, falling back to page chapters:', e);
+      }
+    }
+
+    if (rawChapters.length === 0) {
+      rawChapters = Array.isArray(m.chapters) && m.chapters.length > 0 ? m.chapters : (m.latestChapters || []);
+    }
+
+    // Sort chapters ascending so Chapter 1 is at index 0
+    const sortedChapters = [...rawChapters].sort((a: any, b: any) => {
+      const numA = typeof a.number === 'number' ? a.number : 0;
+      const numB = typeof b.number === 'number' ? b.number : 0;
+      if (numA !== numB) return numA - numB;
+      return 0;
+    });
+
+    const chapters: Chapter[] = sortedChapters.map((ch: any, idx: number) => ({
+      id: `nb-${m.slug}-ch-${ch.number ?? (idx + 1)}`,
+      title: ch.name || `Chapter ${ch.number ?? (idx + 1)}`,
+      chapterNumber: typeof ch.number === 'number' && ch.number > 0 ? ch.number : (idx + 1),
       path: ch.url || `/${cleanSlug}/${ch.slug}`,
       wordCount: 1800,
       content: [],
@@ -826,6 +858,15 @@ export async function getLNWebnovelDetails(
     }
   }
 
+  // Direct high-speed native handler for NovelBuddy
+  if (pluginId === 'novelbuddy') {
+    const direct = await getNovelBuddyDetailsDirect(novelPath);
+    if (direct && direct.chapters && direct.chapters.length > 0) {
+      novelDetailsCache.set(cacheKey, direct);
+      return direct;
+    }
+  }
+
   try {
     const rt = await getLNRuntime();
     const plugin = await rt.loader.load(pluginId);
@@ -913,6 +954,15 @@ export async function getLNWebnovelChapterContent(
           wordCount: wordCount || 1500
         };
       }
+    }
+  }
+
+  // Direct high-speed native handler for NovelBuddy chapter content
+  if (pluginId === 'novelbuddy') {
+    const directContent = await getNovelBuddyChapterContentDirect(chapterPath);
+    if (directContent && directContent.content && directContent.content.length > 0 && directContent.content[0] !== 'Content unavailable at this time.') {
+      chapterContentCache.set(cacheKey, directContent);
+      return directContent;
     }
   }
 

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getLNWebnovelDetails, getLNWebnovelChapterContent, searchLNWebnovels, ACTIVE_WEBNOVEL_SOURCES } from '@/utils/lnreaderService';
 import { findLocalLightNovel } from '@/utils/localLightNovelsService';
+import { parseArchiveEpubChapters } from '@/utils/archiveOrgService';
 import { extractSmartSearchQueries } from '@/utils/searchHelper';
 import { Book } from '@/types';
 
@@ -19,7 +20,26 @@ export async function GET(request: Request) {
     let pluginId = 'novelbuddy';
     let novelPath = novelId || '';
 
-    // 0. If this is explicitly a local light novel ID, load it immediately
+    // 0. If this is explicitly an Archive.org light novel ID, load it immediately
+    if (novelId && novelId.startsWith('archive-ln-')) {
+      const relPath = decodeURIComponent(novelId.replace('archive-ln-', ''));
+      try {
+        const chapters = await parseArchiveEpubChapters(relPath);
+        const fileName = relPath.split('/').pop() || relPath;
+        const cleanTitle = fileName.replace(/\.epub$/i, '').replace(/\[[^\]]+\]/g, '').trim();
+        const book: Partial<Book> = {
+          id: novelId,
+          title: cleanTitle,
+          category: 'lightnovel',
+          chapters
+        };
+        return NextResponse.json({ book, chapters, source: 'archiveorg', sourceName: 'Archive.org Official Release' });
+      } catch (e) {
+        console.warn('Archive light novel stream error in /api/webnovels/read:', e);
+      }
+    }
+
+    // 0B. If this is explicitly a local light novel ID, load it immediately
     if (novelId && novelId.startsWith('local-ln-')) {
       const localDirect = await findLocalLightNovel(novelId, cleanTitle);
       if (localDirect && localDirect.chapters && localDirect.chapters.length > 0) {
@@ -40,7 +60,7 @@ export async function GET(request: Request) {
     let novel: Book | null = null;
 
     // Helper for fast-failing network calls when remote source is down
-    const withTimeout = <T>(promise: Promise<T>, ms = 2800): Promise<T | null> =>
+    const withTimeout = <T>(promise: Promise<T>, ms = 6000): Promise<T | null> =>
       Promise.race([
         promise,
         new Promise<null>(resolve => setTimeout(() => resolve(null), ms))
@@ -48,7 +68,7 @@ export async function GET(request: Request) {
 
     // 1. If novelId was formatted as ln-<plugin>:<path>, try loading it with a strict timeout (skip if user requested a different source)
     if (lnMatch && (!requestedSource || requestedSource === pluginId)) {
-      novel = await withTimeout(getLNWebnovelDetails(pluginId, novelPath), 2800);
+      novel = await withTimeout(getLNWebnovelDetails(pluginId, novelPath), 6000);
 
       // If primary online source failed and we have an authentic local copy, serve it immediately!
       if (!novel || !novel.chapters || novel.chapters.length === 0) {

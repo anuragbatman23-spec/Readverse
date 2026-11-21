@@ -98,6 +98,23 @@ const CLASSIC_TITLE_TO_GUTENBERG_ID: Record<string, string> = {
   'dracula': '345',
   'draculas guest': '10150',
   'dracula\'s guest': '10150',
+  'the adventures of tom sawyer': '74',
+  'adventures of tom sawyer': '74',
+  'tom sawyer': '74',
+  'the adventures of huckleberry finn': '76',
+  'adventures of huckleberry finn': '76',
+  'huckleberry finn': '76',
+  'a christmas carol': '46',
+  'christmas carol': '46',
+  'the prince and the pauper': '1837',
+  'prince and the pauper': '1837',
+  'a connecticut yankee in king arthurs court': '86',
+  'connecticut yankee in king arthurs court': '86',
+  'the secret garden': '1739',
+  'secret garden': '1739',
+  'little women': '514',
+  'the wind in the willows': '289',
+  'wind in the willows': '289',
   'frankenstein': '84',
   'the adventures of sherlock holmes': '1661',
   'adventures of sherlock holmes': '1661',
@@ -320,12 +337,17 @@ export async function GET(request: Request) {
       mirrors.push(GITENBERG_TEXT_URLS[rawId]);
     }
 
-    // 2. Official Project Gutenberg mirrors
+    // 2. Open Project Gutenberg mirrors (pglaf & xmission do not 503 or bot-block)
+    const splitPath = rawId.length > 1 ? rawId.split('').slice(0, -1).join('/') + '/' : '';
     mirrors.push(
+      `https://gutenberg.pglaf.org/cache/epub/${rawId}/pg${rawId}.txt`,
+      `https://mirrors.xmission.com/gutenberg/${splitPath}${rawId}/${rawId}-0.txt`,
+      `https://mirrors.xmission.com/gutenberg/${splitPath}${rawId}/${rawId}.txt`,
+      `https://gutenberg.pglaf.org/${splitPath}${rawId}/${rawId}-0.txt`,
+      `https://gutenberg.pglaf.org/${splitPath}${rawId}/${rawId}.txt`,
+      `https://aleph.gutenberg.org/${splitPath}${rawId}/${rawId}.txt`,
       `https://www.gutenberg.org/cache/epub/${rawId}/pg${rawId}.txt`,
-      `https://www.gutenberg.org/ebooks/${rawId}.txt.utf-8`,
-      `https://www.gutenberg.org/files/${rawId}/${rawId}-0.txt`,
-      `https://aleph.gutenberg.org/${rawId.length > 4 ? rawId.split('').slice(0, -1).join('/') + '/' : ''}${rawId}/${rawId}.txt`
+      `https://www.gutenberg.org/files/${rawId}/${rawId}-0.txt`
     );
 
     for (const mirrorUrl of mirrors) {
