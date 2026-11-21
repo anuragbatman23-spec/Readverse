@@ -8,19 +8,30 @@ import {
   getUserPreferences,
   updateUserPreferences
 } from '@/lib/userDb';
+import { saveStorageMedia, deleteStorageMedia } from '@/lib/d1Client';
 import fs from 'fs';
 import path from 'path';
+
+export const dynamic = 'force-dynamic';
 
 const OVERVIEW_BG_UPLOAD_DIR = path.join(process.cwd(), 'public', 'uploads', 'overview-bg');
 
 function ensureUploadDir() {
-  if (!fs.existsSync(OVERVIEW_BG_UPLOAD_DIR)) {
-    fs.mkdirSync(OVERVIEW_BG_UPLOAD_DIR, { recursive: true });
-  }
+  try {
+    if (!fs.existsSync(OVERVIEW_BG_UPLOAD_DIR)) {
+      fs.mkdirSync(OVERVIEW_BG_UPLOAD_DIR, { recursive: true });
+    }
+  } catch {}
 }
 
-// Safely delete a previous uploaded overview background from disk
-function deleteOldOverviewBg(bgUrl?: string | null) {
+// Safely delete a previous uploaded overview background from D1 and disk
+async function deleteOldOverviewBg(userId?: string | null, bgUrl?: string | null) {
+  if (userId) {
+    try {
+      await deleteStorageMedia(`overview_bg_${userId}`);
+    } catch {}
+  }
+
   if (!bgUrl) return;
   if (!bgUrl.startsWith('/uploads/overview-bg/')) return;
 
@@ -33,7 +44,7 @@ function deleteOldOverviewBg(bgUrl?: string | null) {
       console.log(`[Preferences API] Successfully deleted old overview bg file: ${fileName}`);
     }
   } catch (err) {
-    console.warn(`[Preferences API] Failed to delete old overview bg file ${fileName}:`, err);
+    // Safely ignore on read-only serverless
   }
 }
 
@@ -136,18 +147,29 @@ export async function POST(request: Request) {
 
         // Delete old uploaded overview background if one exists
         if (user.overviewBg) {
-          deleteOldOverviewBg(user.overviewBg);
+          await deleteOldOverviewBg(user.id, user.overviewBg);
         }
 
-        ensureUploadDir();
-        const safeExt = cleanExt.startsWith('.') ? cleanExt : `.${cleanExt}`;
-        const fileName = `overview_bg_${user.id}_${Date.now()}${safeExt}`;
-        const targetPath = path.join(OVERVIEW_BG_UPLOAD_DIR, fileName);
-
         const bytes = await file.arrayBuffer();
-        fs.writeFileSync(targetPath, Buffer.from(bytes));
+        const buffer = Buffer.from(bytes);
+        const mimeType = file.type || 'image/jpeg';
+        const d1Key = `overview_bg_${user.id}`;
 
-        overviewBg = `/uploads/overview-bg/${fileName}`;
+        // 1. Persist to Cloudflare D1
+        await saveStorageMedia(d1Key, mimeType, buffer);
+
+        // 2. Safely attempt local disk write in local dev
+        try {
+          ensureUploadDir();
+          const safeExt = cleanExt.startsWith('.') ? cleanExt : `.${cleanExt}`;
+          const fileName = `overview_bg_${user.id}_${Date.now()}${safeExt}`;
+          const targetPath = path.join(OVERVIEW_BG_UPLOAD_DIR, fileName);
+          fs.writeFileSync(targetPath, buffer);
+        } catch {
+          // Read-only filesystem in Vercel
+        }
+
+        overviewBg = `/api/user/image?id=${d1Key}&v=${Date.now()}`;
         overviewBgSource = 'upload';
       }
     } else {
@@ -180,8 +202,8 @@ export async function POST(request: Request) {
     }
 
     // If setting an external URL or shuffling, clean up any previous local uploaded file
-    if (overviewBg && overviewBg !== user.overviewBg && user.overviewBg?.startsWith('/uploads/overview-bg/')) {
-      deleteOldOverviewBg(user.overviewBg);
+    if (overviewBg && overviewBg !== user.overviewBg && (user.overviewBg?.startsWith('/uploads/overview-bg/') || user.overviewBg?.includes('overview_bg_'))) {
+      await deleteOldOverviewBg(user.id, user.overviewBg);
     }
 
     const updatedUser = updateUserPreferences(user.id, {

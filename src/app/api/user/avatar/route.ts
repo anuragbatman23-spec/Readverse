@@ -2,32 +2,44 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { findUserByEmail, findUserById, findUserByAny, updateUser, createUser } from '@/lib/userDb';
+import { saveStorageMedia, deleteStorageMedia } from '@/lib/d1Client';
 import fs from 'fs';
 import path from 'path';
+
+export const dynamic = 'force-dynamic';
 
 const AVATAR_UPLOAD_DIR = path.join(process.cwd(), 'public', 'uploads', 'avatars');
 
 function ensureUploadDir() {
-  if (!fs.existsSync(AVATAR_UPLOAD_DIR)) {
-    fs.mkdirSync(AVATAR_UPLOAD_DIR, { recursive: true });
+  try {
+    if (!fs.existsSync(AVATAR_UPLOAD_DIR)) {
+      fs.mkdirSync(AVATAR_UPLOAD_DIR, { recursive: true });
+    }
+  } catch {
+    // Read-only filesystem in serverless environments (Vercel)
   }
 }
 
-// Safely delete a previous uploaded avatar from disk
-function deleteOldAvatar(avatarUrl?: string | null) {
+// Safely delete a previous uploaded avatar from D1 and disk
+async function deleteOldAvatar(userId?: string | null, avatarUrl?: string | null) {
+  if (userId) {
+    try {
+      await deleteStorageMedia(`avatar_${userId}`);
+    } catch {}
+  }
+
   if (!avatarUrl) return;
   if (!avatarUrl.startsWith('/uploads/avatars/')) return;
 
-  const fileName = path.basename(avatarUrl);
-  const fullPath = path.join(AVATAR_UPLOAD_DIR, fileName);
-
   try {
+    const fileName = path.basename(avatarUrl);
+    const fullPath = path.join(AVATAR_UPLOAD_DIR, fileName);
     if (fs.existsSync(fullPath)) {
       fs.unlinkSync(fullPath);
       console.log(`[Avatar API] Successfully deleted old avatar file: ${fileName}`);
     }
   } catch (err) {
-    console.warn(`[Avatar API] Failed to delete previous avatar file ${fileName}:`, err);
+    // Safely ignore on read-only serverless
   }
 }
 
@@ -42,9 +54,22 @@ export async function GET(request: Request) {
     }
 
     const user = findUserByEmail(userQuery) || findUserById(userQuery) || findUserByAny(userQuery);
+    let avatarUrl = user?.image || null;
+
+    if (avatarUrl && avatarUrl.startsWith('/uploads/avatars/')) {
+      const localPath = path.join(process.cwd(), 'public', avatarUrl);
+      try {
+        if (!fs.existsSync(localPath)) {
+          avatarUrl = `/api/user/image?id=avatar_${user?.id}`;
+        }
+      } catch {
+        avatarUrl = `/api/user/image?id=avatar_${user?.id}`;
+      }
+    }
+
     return NextResponse.json({
       success: true,
-      avatarUrl: user?.image || null
+      avatarUrl
     });
   } catch (error) {
     console.error('Error in GET /api/user/avatar:', error);
@@ -89,9 +114,9 @@ export async function POST(request: Request) {
           provider: 'google'
         });
       } else {
-        // If user previously had a custom uploaded file on disk, clean it up!
+        // If user previously had a custom uploaded file, clean it up!
         if (user.image && user.image !== avatarUrl) {
-          deleteOldAvatar(user.image);
+          await deleteOldAvatar(user.id, user.image);
         }
         updateUser(user.id, { image: avatarUrl });
       }
@@ -152,30 +177,37 @@ export async function POST(request: Request) {
       });
     }
 
-    // Delete previous uploaded avatar file if one existed
-    if (user.image) {
-      deleteOldAvatar(user.image);
-    }
+    // 1. Delete previous uploaded avatar file from D1 and disk
+    await deleteOldAvatar(user.id, user.image);
 
-    ensureUploadDir();
-
-    const safeExt = cleanExt.startsWith('.') ? cleanExt : `.${cleanExt}`;
-    const fileName = `avatar_${user.id}_${Date.now()}${safeExt}`;
-    const targetFilePath = path.join(AVATAR_UPLOAD_DIR, fileName);
-
+    // 2. Read file bytes
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
-    fs.writeFileSync(targetFilePath, buffer);
+    const mimeType = file.type || 'image/jpeg';
+    const d1Key = `avatar_${user.id}`;
 
-    const publicAvatarUrl = `/uploads/avatars/${fileName}`;
+    // 3. Persist to Cloudflare D1
+    await saveStorageMedia(d1Key, mimeType, buffer);
 
-    // Update user record in users.json
+    // 4. Optionally write to local disk (in dev) without throwing on Vercel EROFS
+    try {
+      ensureUploadDir();
+      const safeExt = cleanExt.startsWith('.') ? cleanExt : `.${cleanExt}`;
+      const fileName = `avatar_${user.id}_${Date.now()}${safeExt}`;
+      const targetFilePath = path.join(AVATAR_UPLOAD_DIR, fileName);
+      fs.writeFileSync(targetFilePath, buffer);
+    } catch {
+      // Safely ignore on read-only serverless
+    }
+
+    // 5. Update user record with permanent media route URL
+    const publicAvatarUrl = `/api/user/image?id=${d1Key}&v=${Date.now()}`;
     updateUser(user.id, { image: publicAvatarUrl });
 
     return NextResponse.json({
       success: true,
       avatarUrl: publicAvatarUrl,
-      message: 'Profile photo uploaded and previous photo cleaned up.'
+      message: 'Profile photo uploaded and saved successfully.'
     });
   } catch (error) {
     console.error('Error in POST /api/user/avatar:', error);
@@ -207,10 +239,8 @@ export async function DELETE(request: Request) {
       );
     }
 
-    // Clean up uploaded file on disk if it was an uploaded file
-    if (user.image) {
-      deleteOldAvatar(user.image);
-    }
+    // Clean up uploaded file in D1 and disk
+    await deleteOldAvatar(user.id, user.image);
 
     // Reset image in users.json
     updateUser(user.id, { image: '' });

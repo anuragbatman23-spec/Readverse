@@ -643,6 +643,53 @@ export const ProfileView: React.FC = () => {
     };
   }, [currentProfileEmail, isOwner]);
 
+  // Client-side image compression & downscaling helper for fast, serverless-friendly uploads
+  const compressImageClient = async (file: File, maxWidth = 1920, maxHeight = 1080, quality = 0.85): Promise<File> => {
+    return new Promise((resolve) => {
+      if (typeof window === 'undefined' || !file.type.startsWith('image/') || file.type === 'image/svg+xml' || file.size < 250 * 1024) {
+        return resolve(file);
+      }
+      try {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = new Image();
+          img.onload = () => {
+            let { width, height } = img;
+            if (width > maxWidth || height > maxHeight) {
+              const ratio = Math.min(maxWidth / width, maxHeight / height);
+              width = Math.round(width * ratio);
+              height = Math.round(height * ratio);
+            }
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            if (!ctx) return resolve(file);
+            ctx.drawImage(img, 0, 0, width, height);
+            canvas.toBlob(
+              (blob) => {
+                if (blob && blob.size < file.size) {
+                  const newName = file.name.replace(/\.[^/.]+$/, '') + '.jpg';
+                  resolve(new File([blob], newName, { type: 'image/jpeg' }));
+                } else {
+                  resolve(file);
+                }
+              },
+              'image/jpeg',
+              quality
+            );
+          };
+          img.onerror = () => resolve(file);
+          img.src = e.target?.result as string;
+        };
+        reader.onerror = () => resolve(file);
+        reader.readAsDataURL(file);
+      } catch {
+        resolve(file);
+      }
+    });
+  };
+
   const handleSelectAvatar = async (url: string) => {
     try {
       setIsAvatarUploading(true);
@@ -678,15 +725,16 @@ export const ProfileView: React.FC = () => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (file.size > 10 * 1024 * 1024) {
-      alert('Image file is too large. Please choose an image smaller than 10MB.');
+    if (file.size > 15 * 1024 * 1024) {
+      alert('Image file is too large. Please choose an image smaller than 15MB.');
       return;
     }
 
     try {
       setIsAvatarUploading(true);
+      const optimizedFile = await compressImageClient(file, 512, 512, 0.85);
       const formData = new FormData();
-      formData.append('file', file);
+      formData.append('file', optimizedFile);
       if (session?.user?.email) {
         formData.append('userEmail', session.user.email);
       }
@@ -751,15 +799,16 @@ export const ProfileView: React.FC = () => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (file.size > 15 * 1024 * 1024) {
-      alert('Image file is too large. Please choose an image smaller than 15MB.');
+    if (file.size > 20 * 1024 * 1024) {
+      alert('Image file is too large. Please choose an image smaller than 20MB.');
       return;
     }
 
     try {
       setIsBannerUploading(true);
+      const optimizedFile = await compressImageClient(file, 1920, 800, 0.85);
       const formData = new FormData();
-      formData.append('file', file);
+      formData.append('file', optimizedFile);
       if (session?.user?.email) {
         formData.append('userEmail', session.user.email);
       }
@@ -1418,6 +1467,9 @@ export const ProfileView: React.FC = () => {
               <img
                 src={activeBannerUrl}
                 alt="Profile Cover Banner"
+                onError={(e) => {
+                  (e.currentTarget as HTMLImageElement).src = '/spotlight-backdrop.png';
+                }}
                 className="w-full h-full object-cover object-center filter brightness-[0.98] contrast-[1.02] scale-100 transition-all duration-700"
               />
             )}
@@ -1530,6 +1582,9 @@ export const ProfileView: React.FC = () => {
                           <img
                             src={userAvatar}
                             alt={userName}
+                            onError={(e) => {
+                              (e.currentTarget as HTMLImageElement).src = '/avatars/av_001.png';
+                            }}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                           />
                           {/* Hover Overlay with Camera Icon (owner only) */}

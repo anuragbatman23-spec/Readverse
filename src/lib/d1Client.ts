@@ -137,3 +137,50 @@ export async function setStorageObject(key: string, data: any): Promise<boolean>
   }
 }
 
+// Media storage helpers for serverless environments (banners, avatars, custom backgrounds)
+export async function saveStorageMedia(key: string, contentType: string, buffer: Buffer): Promise<boolean> {
+  try {
+    const base64Data = buffer.toString('base64');
+    const sizeBytes = buffer.length;
+    await executeD1(
+      `INSERT INTO storage_objects (key, content_type, data, size_bytes)
+       VALUES (?, ?, ?, ?)
+       ON CONFLICT(key) DO UPDATE SET content_type = excluded.content_type, data = excluded.data, size_bytes = excluded.size_bytes`,
+      [key, contentType, base64Data, sizeBytes]
+    );
+    return true;
+  } catch (err) {
+    console.error(`[D1] saveStorageMedia failed for key "${key}":`, err);
+    return false;
+  }
+}
+
+export async function getStorageMedia(key: string): Promise<{ contentType: string; buffer: Buffer } | null> {
+  try {
+    const rows = await queryD1<{ content_type: string; data: string }>(
+      'SELECT content_type, data FROM storage_objects WHERE key = ? LIMIT 1',
+      [key]
+    );
+    if (rows && rows.length > 0 && rows[0].data) {
+      return {
+        contentType: rows[0].content_type || 'image/jpeg',
+        buffer: Buffer.from(rows[0].data, 'base64')
+      };
+    }
+  } catch (err) {
+    console.warn(`[D1] getStorageMedia failed for key "${key}":`, err);
+  }
+  return null;
+}
+
+export async function deleteStorageMedia(key: string): Promise<boolean> {
+  try {
+    await executeD1('DELETE FROM storage_objects WHERE key = ?', [key]);
+    return true;
+  } catch (err) {
+    console.warn(`[D1] deleteStorageMedia failed for key "${key}":`, err);
+    return false;
+  }
+}
+
+
