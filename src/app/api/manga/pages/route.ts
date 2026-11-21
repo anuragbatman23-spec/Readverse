@@ -10,6 +10,9 @@ import { searchToonGod, getToonGodChapters, getToonGodPages } from '@/utils/toon
 import { searchManhwaBuddy, getManhwaBuddyChapters, getManhwaBuddyPages } from '@/utils/manhwabuddy';
 import { getMangaDistrictPages } from '@/utils/mangadistrict';
 
+// In-memory cache for resolved chapter pages
+const mangaPagesCache = new Map<string, { pages: string[]; source: string }>();
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const chapterId = searchParams.get('chapterId');
@@ -20,6 +23,15 @@ export async function GET(request: Request) {
 
   if (!chapterId && !mangaTitle) {
     return NextResponse.json({ error: 'chapterId or title is required' }, { status: 400 });
+  }
+
+  // Check in-memory cache
+  if (chapterId && mangaPagesCache.has(chapterId)) {
+    const cached = mangaPagesCache.get(chapterId)!;
+    return NextResponse.json(
+      { pages: cached.pages, source: cached.source },
+      { headers: { 'Cache-Control': 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400' } }
+    );
   }
 
   // 1. Dedicated Source: Solo Leveling

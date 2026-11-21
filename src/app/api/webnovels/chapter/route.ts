@@ -23,10 +23,13 @@ export async function GET(request: Request) {
         new Promise<never>((_, reject) => setTimeout(() => reject(new Error('Online source timeout')), 3500))
       ]);
       if (chapterData && chapterData.content && chapterData.content.length > 0) {
-        return NextResponse.json({
-          content: chapterData.content,
-          wordCount: chapterData.wordCount
-        });
+        return NextResponse.json(
+          {
+            content: chapterData.content,
+            wordCount: chapterData.wordCount
+          },
+          { headers: { 'Cache-Control': 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400' } }
+        );
       }
     } catch (err: unknown) {
       console.warn(`Online source ${pluginId} failed or timed out for chapter ${path}, checking local storage fallback:`, err);

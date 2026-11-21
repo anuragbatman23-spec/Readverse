@@ -44,6 +44,9 @@ const MANGA_HOSTED_MAPPING: Record<string, string> = {
   'aa6c76f7-5f5f-46b6-a800-911145f81b9b': '199a4cdf-d807-4e3d-ae80-61e4fbc3c50e', // My Dress-Up Darling
 };
 
+// In-memory cache for resolved manga chapter lists
+const mangaChaptersCache = new Map<string, any>();
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const mangaId = searchParams.get('mangaId');
@@ -52,6 +55,13 @@ export async function GET(request: Request) {
 
   if (!mangaId) {
     return NextResponse.json({ error: 'mangaId is required' }, { status: 400 });
+  }
+
+  const cacheKey = `${mangaId}:${mangaTitle}:${requestedSource}`;
+  if (mangaChaptersCache.has(cacheKey)) {
+    return NextResponse.json(mangaChaptersCache.get(cacheKey), {
+      headers: { 'Cache-Control': 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400' }
+    });
   }
 
   const standardAvailableSources = [

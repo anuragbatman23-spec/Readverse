@@ -319,10 +319,13 @@ export async function GET(request: Request) {
   // Check in-memory cache for instant return
   if (rawId && CLASSIC_CHAPTERS_CACHE.has(rawId)) {
     const cachedEntry = CLASSIC_CHAPTERS_CACHE.get(rawId)!;
-    return NextResponse.json({
-      chapters: cachedEntry.chapters,
-      sourceMirror: cachedEntry.source
-    });
+    return NextResponse.json(
+      {
+        chapters: cachedEntry.chapters,
+        sourceMirror: cachedEntry.source
+      },
+      { headers: { 'Cache-Control': 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400' } }
+    );
   }
 
   // Multi-source fallback mirror list for Gutenberg content
@@ -501,10 +504,13 @@ export async function GET(request: Request) {
       CLASSIC_CHAPTERS_CACHE.set(rawId, { chapters, source: usedMirror });
     }
 
-    return NextResponse.json({
-      chapters,
-      sourceMirror: usedMirror
-    });
+    return NextResponse.json(
+      {
+        chapters,
+        sourceMirror: usedMirror
+      },
+      { headers: { 'Cache-Control': 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400' } }
+    );
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Unknown error';
     return NextResponse.json({ error: message }, { status: 500 });

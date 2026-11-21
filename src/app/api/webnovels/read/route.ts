@@ -167,12 +167,15 @@ export async function GET(request: Request) {
           console.warn('Could not preload chapter 1:', e);
         }
       }
-      return NextResponse.json({
-        book: novel,
-        chapters: novel.chapters,
-        source: pluginId,
-        sourceName: ACTIVE_WEBNOVEL_SOURCES.find(s => s.id === pluginId)?.name || pluginId
-      });
+      return NextResponse.json(
+        {
+          book: novel,
+          chapters: novel.chapters,
+          source: pluginId,
+          sourceName: ACTIVE_WEBNOVEL_SOURCES.find(s => s.id === pluginId)?.name || (pluginId === 'novelbuddy' ? 'NovelBuddy' : pluginId)
+        },
+        { headers: { 'Cache-Control': 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400' } }
+      );
     }
 
     // 4. Graceful Curated Preview Chapters to guarantee reader is NEVER blank
