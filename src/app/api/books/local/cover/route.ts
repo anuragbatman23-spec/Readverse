@@ -171,7 +171,7 @@ export async function GET(request: Request) {
         status: 200,
         headers: {
           'Content-Type': cover.contentType,
-          'Cache-Control': 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400',
+          'Cache-Control': 'public, max-age=31536000, s-maxage=31536000, immutable',
           'Access-Control-Allow-Origin': '*'
         }
       });

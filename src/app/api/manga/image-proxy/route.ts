@@ -50,7 +50,7 @@ async function fetchBackupCoverByTitle(title: string): Promise<Response | null> 
             status: 200,
             headers: {
               'Content-Type': contentType,
-              'Cache-Control': 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400',
+              'Cache-Control': 'public, max-age=31536000, s-maxage=31536000, immutable',
               'Access-Control-Allow-Origin': '*'
             }
           });
@@ -85,7 +85,7 @@ async function fetchBackupCoverByTitle(title: string): Promise<Response | null> 
             status: 200,
             headers: {
               'Content-Type': contentType,
-              'Cache-Control': 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400',
+              'Cache-Control': 'public, max-age=31536000, s-maxage=31536000, immutable',
               'Access-Control-Allow-Origin': '*'
             }
           });
@@ -114,7 +114,7 @@ async function fetchBackupCoverByTitle(title: string): Promise<Response | null> 
             status: 200,
             headers: {
               'Content-Type': contentType,
-              'Cache-Control': 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400',
+              'Cache-Control': 'public, max-age=31536000, s-maxage=31536000, immutable',
               'Access-Control-Allow-Origin': '*'
             }
           });
@@ -148,7 +148,7 @@ async function fetchBackupCoverByTitle(title: string): Promise<Response | null> 
       status: 200,
       headers: {
         'Content-Type': contentType,
-        'Cache-Control': 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400',
+        'Cache-Control': 'public, max-age=31536000, s-maxage=31536000, immutable',
         'Access-Control-Allow-Origin': '*'
       }
     });
@@ -263,7 +263,7 @@ export async function GET(request: Request) {
             status: 200,
             headers: {
               'Content-Type': fbRes.headers.get('content-type') || 'image/jpeg',
-              'Cache-Control': 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400',
+              'Cache-Control': 'public, max-age=31536000, s-maxage=31536000, immutable',
               'Access-Control-Allow-Origin': '*'
             }
           });
@@ -279,7 +279,7 @@ export async function GET(request: Request) {
       status: 200,
       headers: {
         'Content-Type': contentType,
-        'Cache-Control': 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400',
+        'Cache-Control': 'public, max-age=31536000, s-maxage=31536000, immutable',
         'Access-Control-Allow-Origin': '*'
       }
     });

@@ -33,7 +33,7 @@ export async function GET(request: Request) {
 
         return NextResponse.json(
           { chapters, book },
-          { headers: { 'Cache-Control': 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400' } }
+          { headers: { 'Cache-Control': 'public, max-age=31536000, s-maxage=31536000, immutable' } }
         );
       } catch (err: any) {
         console.error('Archive.org stream error:', err);
@@ -60,7 +60,7 @@ export async function GET(request: Request) {
 
         return NextResponse.json(
           { chapters, book },
-          { headers: { 'Cache-Control': 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400' } }
+          { headers: { 'Cache-Control': 'public, max-age=31536000, s-maxage=31536000, immutable' } }
         );
       }
 
@@ -79,7 +79,7 @@ export async function GET(request: Request) {
 
         return NextResponse.json(
           { chapters, book },
-          { headers: { 'Cache-Control': 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400' } }
+          { headers: { 'Cache-Control': 'public, max-age=31536000, s-maxage=31536000, immutable' } }
         );
       } catch (cloudErr: any) {
         return NextResponse.json({ error: `Light novel file not found locally or on Archive.org: ${relPath}` }, { status: 404 });
@@ -126,7 +126,7 @@ export async function GET(request: Request) {
           };
           return NextResponse.json(
           { chapters, book },
-          { headers: { 'Cache-Control': 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400' } }
+          { headers: { 'Cache-Control': 'public, max-age=31536000, s-maxage=31536000, immutable' } }
         );
         }
         return NextResponse.json({ error: `File ${decodedFilename} not found` }, { status: 404 });

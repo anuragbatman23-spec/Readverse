@@ -30,7 +30,7 @@ export async function GET(request: Request) {
     const cached = mangaPagesCache.get(chapterId)!;
     return NextResponse.json(
       { pages: cached.pages, source: cached.source },
-      { headers: { 'Cache-Control': 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400' } }
+      { headers: { 'Cache-Control': 'public, max-age=31536000, s-maxage=31536000, immutable' } }
     );
   }
 

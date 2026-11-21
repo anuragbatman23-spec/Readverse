@@ -324,7 +324,7 @@ export async function GET(request: Request) {
         chapters: cachedEntry.chapters,
         sourceMirror: cachedEntry.source
       },
-      { headers: { 'Cache-Control': 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400' } }
+      { headers: { 'Cache-Control': 'public, max-age=31536000, s-maxage=31536000, immutable' } }
     );
   }
 
@@ -509,7 +509,7 @@ export async function GET(request: Request) {
         chapters,
         sourceMirror: usedMirror
       },
-      { headers: { 'Cache-Control': 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400' } }
+      { headers: { 'Cache-Control': 'public, max-age=31536000, s-maxage=31536000, immutable' } }
     );
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Unknown error';
