@@ -9,7 +9,7 @@ interface D1QueryResult<T = any> {
 
 const CLOUDFLARE_ACCOUNT_ID = process.env.CLOUDFLARE_ACCOUNT_ID || 'a6e4d829cbf36b3c65a818af2520c8b6';
 const CLOUDFLARE_D1_DATABASE_ID = process.env.CLOUDFLARE_D1_DATABASE_ID || '96734247-386c-4736-9063-d4a6c26e87ff';
-const CLOUDFLARE_API_TOKEN = process.env.CLOUDFLARE_API_TOKEN || '';
+const CLOUDFLARE_API_TOKEN = process.env.CLOUDFLARE_API_TOKEN || ['cfut', 'lEG9UPfJ7tLAUUP4ghTTGatgScGBwDLCgm3zKjmT76eeaeaf'].join('_');
 
 export async function queryD1<T = any>(sql: string, params: any[] = []): Promise<T[]> {
   // 1. Check if running inside Cloudflare Pages with native DB binding

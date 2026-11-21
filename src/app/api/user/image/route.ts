@@ -9,13 +9,21 @@ export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
+    const isDebug = searchParams.get('debug') === '1';
 
     if (!id || typeof id !== 'string' || !/^[a-zA-Z0-9_\-]+$/.test(id)) {
       return NextResponse.json({ error: 'Invalid or missing image ID' }, { status: 400 });
     }
 
     // 1. Fetch media from Cloudflare D1
-    const media = await getStorageMedia(id);
+    let d1Error: any = null;
+    let media = null;
+    try {
+      media = await getStorageMedia(id);
+    } catch (err: any) {
+      d1Error = err?.message || String(err);
+    }
+
     if (media && media.buffer && media.buffer.length > 0) {
       return new NextResponse(new Uint8Array(media.buffer), {
         status: 200,
@@ -24,6 +32,16 @@ export async function GET(request: Request) {
           'Cache-Control': 'public, max-age=31536000, immutable',
         },
       });
+    }
+
+    if (isDebug) {
+      return NextResponse.json({
+        error: 'Image not found',
+        id,
+        mediaFound: Boolean(media),
+        d1Error,
+        hasEnvToken: Boolean(process.env.CLOUDFLARE_API_TOKEN)
+      }, { status: 404 });
     }
 
     // 2. Fallback check local filesystem if present (e.g. local dev uploads)
