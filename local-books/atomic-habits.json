@@ -1,0 +1,119 @@
+{
+  "id": "local-atomic-habits",
+  "title": "Atomic Habits: An Easy & Proven Way to Build Good Habits & Break Bad Ones",
+  "author": "James Clear",
+  "category": "book",
+  "coverImage": "https://images-na.ssl-images-amazon.com/images/I/81wgcld4wxL.jpg",
+  "description": "Stored on your local server. No matter your goals, Atomic Habits offers a proven framework for improving every day with tiny changes that compound into remarkable results.",
+  "genre": ["Self-Help", "Psychology", "Productivity", "Local Server"],
+  "rating": 4.95,
+  "pointsPerChapter": 2.0,
+  "chapters": [
+    {
+      "id": "local-ah-ch-1",
+      "title": "Chapter 1: The Surprising Power of Atomic Habits",
+      "chapterNumber": 1,
+      "wordCount": 1820,
+      "content": [
+        "In 2003, the fate of British Cycling changed. The organization, which had been the governing body for professional cycling in Great Britain, had endured nearly one hundred years of mediocrity.",
+        "Since 1908, British riders had won just a single gold medal at the Olympic Games, and they had fared even worse in cycling’s biggest race, the Tour de France. In 110 years, no British cyclist had ever won the event. In fact, the performance of British riders had been so underwhelming that one of the top bike manufacturers in Europe refused to sell bikes to the team because they were afraid that it would hurt sales if other professionals saw the Brits using their gear.",
+        "The organization hired Dave Brailsford to put British Cycling on a new trajectory. What made Brailsford different from previous coaches was his relentless commitment to a strategy that he referred to as 'the aggregation of marginal gains,' which was the philosophy of searching for a tiny margin of improvement in everything you do.",
+        "Brailsford said, 'The whole principle came from the idea that if you broke down everything you could think of that goes into riding a bike, and then improve it by 1 percent, you will get a significant increase when you put them all together.'",
+        "They redesigned the bike seats to make them more comfortable and rubbed alcohol on the tires for a better grip. They asked riders to wear electrically heated overshorts to maintain ideal muscle temperature while riding. They tested different fabrics in a wind tunnel and had their outdoor riders switch to indoor racing suits, which proved to be lighter and more aerodynamic.",
+        "Just five years after Brailsford took over, the British Cycling team dominated the road and track cycling events at the 2008 Olympic Games in Beijing, where they won an astounding 60 percent of the gold medals available. Four years later, at the London Olympic Games, they set nine Olympic records and seven world records. That same year, Bradley Wiggins became the first British cyclist to win the Tour de France.",
+        "How does this happen? How does a team of previously ordinary athletes transform into world champions with tiny changes that, at first glance, seem to make at best a modest difference? Why do small improvements accumulate into such remarkable results, and how can you replicate this approach in your own life?",
+        "It is so easy to overestimate the importance of one defining moment and underestimate the value of making small improvements on a daily basis. Too often, we convince ourselves that massive success requires massive action. Whether it is losing weight, building a business, writing a book, winning a championship, or achieving any other goal, we put pressure on ourselves to make some earth-shattering improvement that everyone will talk about.",
+        "Meanwhile, improving by 1 percent isn't particularly notable—sometimes it isn’t even noticeable—but it can be far more meaningful, especially in the long run. The difference a tiny improvement can make over time is astounding. Here’s how the math works out: if you can get 1 percent better each day for one year, you’ll end up thirty-seven times better by the time you’re done.",
+        "Habits are the compound interest of self-improvement. The same way that money multiplies through compound interest, the effects of your habits multiply as you repeat them. They seem to make little difference on any given day and yet the impact they deliver over the months and years can be enormous."
+      ]
+    },
+    {
+      "id": "local-ah-ch-2",
+      "title": "Chapter 2: How Your Habits Shape Your Identity",
+      "chapterNumber": 2,
+      "wordCount": 1750,
+      "content": [
+        "Why is it so easy to repeat bad habits and so hard to form good ones? Few things can have a more powerful impact on your life than improving your daily habits. And yet the process of building good habits is notoriously difficult, and maintaining them for more than a few days feels like a monumental chore.",
+        "Bad habits repeat themselves again and again not because you don't want to change, but because you have the wrong system for change.",
+        "There are three layers of behavior change: a change in your outcomes, a change in your processes, or a change in your identity.",
+        "The first layer is changing your outcomes. This level is concerned with changing your results: losing weight, publishing a book, winning a championship. Most of the goals you set are associated with this level of change.",
+        "The second layer is changing your process. This level is concerned with changing your habits and systems: implementing a new routine at the gym, decluttering your desk for better workflow, developing a meditation practice. Most of the habits you build are associated with this level.",
+        "The third and deepest layer is changing your identity. This level is concerned with changing your beliefs: your worldview, your self-image, your judgments about yourself and others. Most of the beliefs, assumptions, and biases you hold are associated with this level.",
+        "When it comes to building habits that last—when it comes to building systems of 1 percent improvements—the problem is not that one level is 'better' or 'worse' than another. All levels of change are useful in their own way. The problem is the direction of change.",
+        "Many people begin the process of changing their habits by focusing on what they want to achieve. This leads us to outcome-based habits. The alternative is to build identity-based habits. With this approach, we start by focusing on who we wish to become.",
+        "Imagine two people resisting a cigarette. When offered a smoke, the first person says, 'No thanks. I’m trying to quit.' It sounds like a reasonable response, but this person still believes they are a smoker who is trying to be something else. They are hoping their behavior will change while carrying around the same beliefs.",
+        "The second person declines by saying, 'No thanks. I’m not a smoker.' It’s a small difference, but this statement signals a shift in identity. Smoking was part of their past life, not their current one. They no longer identify as someone who smokes.",
+        "The ultimate form of intrinsic motivation is when a habit becomes part of your identity. It’s one thing to say 'I’m the type of person who wants this.' It’s something very different to say 'I’m the type of person who is this.' The goal is not to read a book, the goal is to become a reader. The goal is not to run a marathon, the goal is to become a runner. The goal is not to learn an instrument, the goal is to become a musician."
+      ]
+    },
+    {
+      "id": "local-ah-ch-3",
+      "title": "Chapter 3: The 4 Laws of Behavior Change",
+      "chapterNumber": 3,
+      "wordCount": 1690,
+      "content": [
+        "In 1898, a psychologist named Edward Thorndike conducted an experiment that would lay the foundation for our understanding of how habits form and the rules that guide our behavior. Thorndike was interested in studying the behavior of animals, and he started by working with cats.",
+        "He would place each cat inside a contraption known as a puzzle box. The box was designed in such a way that the cat could escape through a door by 'some simple act, such as pulling at a loop of cord, pressing a lever, or stepping on a platform.' Once the door opened, the cat could run out and eat a bowl of food placed outside.",
+        "Thorndike tracked the behavior of each cat over dozens of trials. In the beginning, the animals moved about inside the box at random. But as soon as the lever had been pressed and the door opened, the process of learning began. Gradually, each cat learned to associate the action of pressing the lever with the reward of escaping the box and getting food.",
+        "By the thirtieth trial, the cat could escape in an average of six to eight seconds. Thorndike summarized his findings by stating: 'behaviors followed by satisfying consequences tend to be repeated and those that produce unpleasant consequences are less likely to be repeated.'",
+        "A habit is a behavior that has been repeated enough times to become automatic. The ultimate purpose of habits is to solve the problems of life with as little energy and effort as possible.",
+        "Any habit can be subdivided into a feedback loop that involves four steps: cue, craving, response, and reward.",
+        "The cue triggers your brain to initiate a behavior. It is a bit of information that predicts a reward.",
+        "Cravings are the second step, and they are the motivational force behind every habit. Without some level of motivation or desire—without craving a change—we have no reason to act. What you crave is not the habit itself but the change in state it delivers.",
+        "The third step is the response. The response is the actual habit you perform, which can take the form of a thought or an action. Whether a response occurs depends on how motivated you are and how much friction is associated with the behavior.",
+        "Finally, the response delivers the reward. Rewards are the end goal of every habit. The cue is about noticing the reward. The craving is about wanting the reward. The response is about obtaining the reward.",
+        "These four steps create the Four Laws of Behavior Change: 1st Law (Cue): Make it obvious. 2nd Law (Craving): Make it attractive. 3rd Law (Response): Make it easy. 4th Law (Reward): Make it satisfying."
+      ]
+    },
+    {
+      "id": "local-ah-ch-4",
+      "title": "Chapter 4: The 1st Law — Make It Obvious",
+      "chapterNumber": 4,
+      "wordCount": 1600,
+      "content": [
+        "The human brain is a prediction machine. It is continuously taking in your surroundings and analyzing the information it comes across. Whenever you experience something repeatedly—like the spark of a lighter or the ring of a phone—your brain begins noticing what is important, sorting through the details and highlighting the relevant cues.",
+        "With enough practice, you can pick up on the cues that predict certain outcomes without consciously thinking about it. This is why you don’t need to be aware of the cue for a habit to begin. But this ability can be both a blessing and a curse.",
+        "Once a habit is firmly rooted in your life, you are mostly unaware of it. You check your phone when you hear a ping, you pour a cup of coffee when you walk into the kitchen, you grab a snack when you sit in front of the TV. If you want to build a new habit or break an old one, the first step is to bring your habits to awareness.",
+        "One of the best ways to do this is with a Habit Scorecard. To create your own, make a list of your daily habits from the moment you wake up to the moment you go to sleep. Next to each habit, write a plus sign (+) if it is a good habit, a minus sign (-) if it is a bad habit, and an equals sign (=) if it is a neutral habit.",
+        "Once you have awareness, you can use the strategy known as Implementation Intentions. Hundreds of studies have shown that people who make a specific plan for when and where they will perform a new habit are far more likely to follow through.",
+        "The formula is simple: 'I will [BEHAVIOR] at [TIME] in [LOCATION].' For example: 'I will meditate for one minute at 7:00 a.m. in my kitchen.'",
+        "An even more powerful variation is Habit Stacking. Instead of pairing your new habit with a particular time and location, you pair it with a current habit. The habit stacking formula is: 'After [CURRENT HABIT], I will [NEW HABIT].'",
+        "For example: 'After I pour my cup of coffee each morning, I will write down three things I am grateful for.' 'After I take off my work shoes, I will immediately change into my workout clothes.'"
+      ]
+    },
+    {
+      "id": "local-ah-ch-5",
+      "title": "Chapter 5: The 2nd & 3rd Laws — Make It Attractive & Easy",
+      "chapterNumber": 5,
+      "wordCount": 1720,
+      "content": [
+        "In the 1940s, a Dutch scientist named Niko Tinbergen conducted a series of experiments that transformed our understanding of what motivates us. Tinbergen investigated the behavior of herring gulls, which have a small red dot on their beaks.",
+        "Tinbergen noticed that newly hatched chicks would peck at this red spot whenever they wanted food. He created fake cardboard beaks with larger, exaggerated red spots. To his amazement, the chicks pecked at the fake, oversized spots even more vigorously than at their mothers’ real beaks! They preferred the exaggerated version.",
+        "Modern society is filled with supernormal stimuli. Fast food is an exaggerated version of nutrition. Video games and social media are exaggerated versions of social status and adventure. Our brains are flooded with dopamine spikes for stimuli that never existed in our evolutionary past.",
+        "Dopamine is released not only when you experience pleasure, but also when you anticipate it. It is the anticipation of a reward—not the fulfillment of it—that gets us to take action. To build a habit, you must make it attractive by leveraging Temptation Bundling.",
+        "Temptation bundling works by linking an action you want to do with an action you need to do. For example: 'After I process 5 customer support emails (need), I will watch 10 minutes of Netflix (want).'",
+        "Now consider the 3rd Law: Make it Easy. Conventional wisdom holds that motivation is the key to habit change. If you really wanted it, you’d actually do it. But the truth is, our real motivation is to be lazy and to do what is convenient.",
+        "Energy is precious, and the brain is wired to conserve it whenever possible. It is human nature to follow the Law of Least Effort: when deciding between two similar options, people will naturally gravitate toward the option that requires the least amount of work.",
+        "Therefore, to make good habits stick, you must reduce friction. Optimize your environment. If you want to draw more, place your sketchpad and pencils right on your desk. If you want to exercise, lay out your workout clothes the night before.",
+        "And master the 2-Minute Rule: when you start a new habit, it should take less than two minutes to do. 'Read before bed each night' becomes 'Read one page.' 'Run three miles' becomes 'Tie my running shoes.' Establish the habit before you optimize it."
+      ]
+    },
+    {
+      "id": "local-ah-ch-6",
+      "title": "Chapter 6: The 4th Law — Make It Satisfying & Unbreakable",
+      "chapterNumber": 6,
+      "wordCount": 1640,
+      "content": [
+        "In the late 1990s, a public health worker named Stephen Luby visited Karachi, Pakistan. Karachi was one of the most densely populated cities in the world, and more than 60 percent of its residents lived in squatter settlements. Sewage ran open in the streets, and illnesses like diarrhea and pneumonia ran rampant.",
+        "Luby partnered with Procter & Gamble to distribute a supply of Safeguard soap to the neighborhoods. But they did something clever: they didn’t just hand out soap, they made handwashing a deeply satisfying experience. Safeguard lathered easily, smelled sweet, and felt luxuriant.",
+        "Within months, the health of children in the neighborhood improved dramatically. Diarrhea rates fell by 52 percent; pneumonia by 48 percent. Why? Because handwashing felt good in the moment. It was satisfying.",
+        "The Cardinal Rule of Behavior Change is this: what is immediately rewarded is repeated. What is immediately punished is avoided.",
+        "The first three laws increase the odds that a behavior will be performed this time. The fourth law increases the odds that a behavior will be repeated next time.",
+        "One of the most satisfying feelings is the feeling of making progress. A habit tracker is a simple way to measure whether you did a habit. The most basic format is to get a calendar and cross off each day you stick with your routine.",
+        "Don't break the chain. If you miss one day, that’s an accident. If you miss two days, it’s the start of a new habit. The rule is simple: never miss twice.",
+        "When successful people have a bad day, they still show up. Even if they only do five pushups or read one sentence, they maintain their identity as someone who doesn't miss.",
+        "Small habits don't simply add up; they compound. That is the power of atomic habits: tiny changes, remarkable results."
+      ]
+    }
+  ]
+}

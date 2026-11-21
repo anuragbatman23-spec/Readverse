@@ -9,18 +9,31 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@lnreader/plugin-runtime": "^0.1.0",
+    "@types/bcryptjs": "^2.4.6",
+    "bcryptjs": "^3.0.3",
+    "canvas-confetti": "^1.9.4",
+    "cheerio": "^1.2.0",
+    "html2canvas": "^1.4.1",
+    "jszip": "^3.10.2",
+    "lucide-react": "^1.61.0",
+    "next": "14.2.35",
+    "next-auth": "^4.24.15",
     "react": "^18",
-    "react-dom": "^18",
-    "next": "14.2.35"
+    "react-dom": "^18"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@cloudflare/next-on-pages": "^1.13.16",
+    "@opennextjs/cloudflare": "^1.20.18",
+    "@types/canvas-confetti": "^1.9.0",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.35",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
-    "eslint": "^8",
-    "eslint-config-next": "14.2.35"
+    "typescript": "^5",
+    "wrangler": "^4.165.0"
   }
 }

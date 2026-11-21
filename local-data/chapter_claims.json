@@ -1,0 +1,46 @@
+[
+  {
+    "id": "claim_1794550403372_cd35b0b6",
+    "userId": "usr_1793996060699_vybbf",
+    "userEmail": "anurag.batman23@gmail.com",
+    "bookId": "c0ee660b-f9f2-45c3-8068-5123ff53f84a",
+    "chapterId": "wc-01J76XYZ0MX1T53YGHDX0QZ247",
+    "category": "manhwa",
+    "pointsAwarded": 1.5,
+    "readingSeconds": 26,
+    "claimedAt": "2026-11-13T06:13:23.372Z"
+  },
+  {
+    "id": "claim_1794550780497_dd60626e",
+    "userId": "usr_1793996060699_vybbf",
+    "userEmail": "anurag.batman23@gmail.com",
+    "bookId": "c0ee660b-f9f2-45c3-8068-5123ff53f84a",
+    "chapterId": "wc-01J76XYYTE60FATJJK9JBRJYJW",
+    "category": "manhwa",
+    "pointsAwarded": 1.5,
+    "readingSeconds": 374,
+    "claimedAt": "2026-11-13T06:19:40.498Z"
+  },
+  {
+    "id": "claim_1794553300004_262f68e2",
+    "userId": "usr_1793836824019_2ijnx",
+    "userEmail": "anurag.batman5@gmail.com",
+    "bookId": "c0ee660b-f9f2-45c3-8068-5123ff53f84a",
+    "chapterId": "wc-01J76XYZ0MX1T53YGHDX0QZ247",
+    "category": "manhwa",
+    "pointsAwarded": 1.5,
+    "readingSeconds": 49,
+    "claimedAt": "2026-11-13T07:01:40.005Z"
+  },
+  {
+    "id": "claim_1794553460424_dbcf5604",
+    "userId": "usr_1793836824019_2ijnx",
+    "userEmail": "anurag.batman5@gmail.com",
+    "bookId": "wind-breaker-manhwa",
+    "chapterId": "wc-01J7W74HK06HFW526BJGN5DHEX",
+    "category": "manhwa",
+    "pointsAwarded": 1.5,
+    "readingSeconds": 105,
+    "claimedAt": "2026-11-13T07:04:20.424Z"
+  }
+]

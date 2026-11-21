@@ -1,0 +1,722 @@
+[
+  {
+    "id": "av_001",
+    "name": "Gyarados",
+    "category": "pokemon",
+    "image": "/avatars/av_001.png"
+  },
+  {
+    "id": "av_002",
+    "name": "Typhlosion",
+    "category": "pokemon",
+    "image": "/avatars/av_002.png"
+  },
+  {
+    "id": "av_003",
+    "name": "Sceptile",
+    "category": "pokemon",
+    "image": "/avatars/av_003.png"
+  },
+  {
+    "id": "av_004",
+    "name": "Swampert",
+    "category": "pokemon",
+    "image": "/avatars/av_004.png"
+  },
+  {
+    "id": "av_005",
+    "name": "Bisharp",
+    "category": "pokemon",
+    "image": "/avatars/av_005.png"
+  },
+  {
+    "id": "av_006",
+    "name": "Noivern",
+    "category": "pokemon",
+    "image": "/avatars/av_006.png"
+  },
+  {
+    "id": "av_007",
+    "name": "Aggron",
+    "category": "pokemon",
+    "image": "/avatars/av_007.png"
+  },
+  {
+    "id": "av_008",
+    "name": "Milotic",
+    "category": "pokemon",
+    "image": "/avatars/av_008.png"
+  },
+  {
+    "id": "av_009",
+    "name": "Haxorus",
+    "category": "pokemon",
+    "image": "/avatars/av_009.png"
+  },
+  {
+    "id": "av_010",
+    "name": "Volcarona",
+    "category": "pokemon",
+    "image": "/avatars/av_010.png"
+  },
+  {
+    "id": "av_011",
+    "name": "Ferrothorn",
+    "category": "pokemon",
+    "image": "/avatars/av_011.png"
+  },
+  {
+    "id": "av_012",
+    "name": "Mimikyu",
+    "category": "pokemon",
+    "image": "/avatars/av_012.png"
+  },
+  {
+    "id": "av_013",
+    "name": "Chandelure",
+    "category": "pokemon",
+    "image": "/avatars/av_013.png"
+  },
+  {
+    "id": "av_014",
+    "name": "Delphox",
+    "category": "pokemon",
+    "image": "/avatars/av_014.png"
+  },
+  {
+    "id": "av_015",
+    "name": "Primarina",
+    "category": "pokemon",
+    "image": "/avatars/av_015.png"
+  },
+  {
+    "id": "av_016",
+    "name": "Toxapex",
+    "category": "pokemon",
+    "image": "/avatars/av_016.png"
+  },
+  {
+    "id": "av_017",
+    "name": "Dragapult",
+    "category": "pokemon",
+    "image": "/avatars/av_017.png"
+  },
+  {
+    "id": "av_018",
+    "name": "Zygarde",
+    "category": "pokemon",
+    "image": "/avatars/av_018.png"
+  },
+  {
+    "id": "av_019",
+    "name": "Alolan Ninetales",
+    "category": "pokemon",
+    "image": "/avatars/av_019.png"
+  },
+  {
+    "id": "av_020",
+    "name": "Kartana",
+    "category": "pokemon",
+    "image": "/avatars/av_020.png"
+  },
+  {
+    "id": "av_021",
+    "name": "Blastoise",
+    "category": "legendaries",
+    "image": "/avatars/av_021.png"
+  },
+  {
+    "id": "av_022",
+    "name": "Venusaur",
+    "category": "legendaries",
+    "image": "/avatars/av_022.png"
+  },
+  {
+    "id": "av_023",
+    "name": "Tyranitar",
+    "category": "legendaries",
+    "image": "/avatars/av_023.png"
+  },
+  {
+    "id": "av_024",
+    "name": "Gallade",
+    "category": "legendaries",
+    "image": "/avatars/av_024.png"
+  },
+  {
+    "id": "av_025",
+    "name": "Metagross",
+    "category": "legendaries",
+    "image": "/avatars/av_025.png"
+  },
+  {
+    "id": "av_026",
+    "name": "Lugia",
+    "category": "legendaries",
+    "image": "/avatars/av_026.png"
+  },
+  {
+    "id": "av_027",
+    "name": "Ho-Oh",
+    "category": "legendaries",
+    "image": "/avatars/av_027.png"
+  },
+  {
+    "id": "av_028",
+    "name": "Articuno",
+    "category": "legendaries",
+    "image": "/avatars/av_028.png"
+  },
+  {
+    "id": "av_029",
+    "name": "Zapdos",
+    "category": "legendaries",
+    "image": "/avatars/av_029.png"
+  },
+  {
+    "id": "av_030",
+    "name": "Moltres",
+    "category": "legendaries",
+    "image": "/avatars/av_030.png"
+  },
+  {
+    "id": "av_031",
+    "name": "Heatran",
+    "category": "legendaries",
+    "image": "/avatars/av_031.png"
+  },
+  {
+    "id": "av_032",
+    "name": "Dialga",
+    "category": "legendaries",
+    "image": "/avatars/av_032.png"
+  },
+  {
+    "id": "av_033",
+    "name": "Palkia",
+    "category": "legendaries",
+    "image": "/avatars/av_033.png"
+  },
+  {
+    "id": "av_034",
+    "name": "Giratina",
+    "category": "legendaries",
+    "image": "/avatars/av_034.png"
+  },
+  {
+    "id": "av_035",
+    "name": "Reshiram",
+    "category": "legendaries",
+    "image": "/avatars/av_035.png"
+  },
+  {
+    "id": "av_036",
+    "name": "Zekrom",
+    "category": "legendaries",
+    "image": "/avatars/av_036.png"
+  },
+  {
+    "id": "av_037",
+    "name": "Kyurem",
+    "category": "legendaries",
+    "image": "/avatars/av_037.png"
+  },
+  {
+    "id": "av_038",
+    "name": "Solgaleo",
+    "category": "legendaries",
+    "image": "/avatars/av_038.png"
+  },
+  {
+    "id": "av_039",
+    "name": "Lunala",
+    "category": "legendaries",
+    "image": "/avatars/av_039.png"
+  },
+  {
+    "id": "av_040",
+    "name": "Aegislash",
+    "category": "legendaries",
+    "image": "/avatars/av_040.png"
+  },
+  {
+    "id": "av_041",
+    "name": "Kratos",
+    "category": "gaming",
+    "image": "/avatars/av_041.png"
+  },
+  {
+    "id": "av_042",
+    "name": "Geralt of Rivia",
+    "category": "gaming",
+    "image": "/avatars/av_042.png"
+  },
+  {
+    "id": "av_043",
+    "name": "Arthur Morgan",
+    "category": "gaming",
+    "image": "/avatars/av_043.png"
+  },
+  {
+    "id": "av_044",
+    "name": "Master Chief",
+    "category": "gaming",
+    "image": "/avatars/av_044.png"
+  },
+  {
+    "id": "av_045",
+    "name": "Doom Slayer",
+    "category": "gaming",
+    "image": "/avatars/av_045.png"
+  },
+  {
+    "id": "av_046",
+    "name": "Leon S. Kennedy",
+    "category": "gaming",
+    "image": "/avatars/av_046.png"
+  },
+  {
+    "id": "av_047",
+    "name": "Ellie",
+    "category": "gaming",
+    "image": "/avatars/av_047.png"
+  },
+  {
+    "id": "av_048",
+    "name": "Joel Miller",
+    "category": "gaming",
+    "image": "/avatars/av_048.png"
+  },
+  {
+    "id": "av_049",
+    "name": "Solid Snake",
+    "category": "gaming",
+    "image": "/avatars/av_049.png"
+  },
+  {
+    "id": "av_050",
+    "name": "Cloud Strife",
+    "category": "gaming",
+    "image": "/avatars/av_050.png"
+  },
+  {
+    "id": "av_051",
+    "name": "Ezio Auditore",
+    "category": "gaming",
+    "image": "/avatars/av_051.png"
+  },
+  {
+    "id": "av_052",
+    "name": "V (Cyberpunk)",
+    "category": "gaming",
+    "image": "/avatars/av_052.png"
+  },
+  {
+    "id": "av_053",
+    "name": "2B (NieR)",
+    "category": "gaming",
+    "image": "/avatars/av_053.png"
+  },
+  {
+    "id": "av_054",
+    "name": "Aiden Pearce",
+    "category": "gaming",
+    "image": "/avatars/av_054.png"
+  },
+  {
+    "id": "av_055",
+    "name": "Jin Sakai",
+    "category": "gaming",
+    "image": "/avatars/av_055.png"
+  },
+  {
+    "id": "av_056",
+    "name": "Link",
+    "category": "gaming",
+    "image": "/avatars/av_056.png"
+  },
+  {
+    "id": "av_057",
+    "name": "Aloy",
+    "category": "gaming",
+    "image": "/avatars/av_057.png"
+  },
+  {
+    "id": "av_058",
+    "name": "Sun Wukong",
+    "category": "gaming",
+    "image": "/avatars/av_058.png"
+  },
+  {
+    "id": "av_059",
+    "name": "Scorpion",
+    "category": "gaming",
+    "image": "/avatars/av_059.png"
+  },
+  {
+    "id": "av_060",
+    "name": "Dante",
+    "category": "gaming",
+    "image": "/avatars/av_060.png"
+  },
+  {
+    "id": "av_061",
+    "name": "Guts",
+    "category": "anime",
+    "image": "/avatars/av_061.png"
+  },
+  {
+    "id": "av_062",
+    "name": "Lelouch Lamperouge",
+    "category": "anime",
+    "image": "/avatars/av_062.png"
+  },
+  {
+    "id": "av_063",
+    "name": "Light Yagami",
+    "category": "anime",
+    "image": "/avatars/av_063.png"
+  },
+  {
+    "id": "av_064",
+    "name": "L Lawliet",
+    "category": "anime",
+    "image": "/avatars/av_064.png"
+  },
+  {
+    "id": "av_065",
+    "name": "Itachi Uchiha",
+    "category": "anime",
+    "image": "/avatars/av_065.png"
+  },
+  {
+    "id": "av_066",
+    "name": "Pain",
+    "category": "anime",
+    "image": "/avatars/av_066.png"
+  },
+  {
+    "id": "av_067",
+    "name": "Kakashi Hatake",
+    "category": "anime",
+    "image": "/avatars/av_067.png"
+  },
+  {
+    "id": "av_068",
+    "name": "Eren Yeager",
+    "category": "anime",
+    "image": "/avatars/av_068.png"
+  },
+  {
+    "id": "av_069",
+    "name": "Levi Ackerman",
+    "category": "anime",
+    "image": "/avatars/av_069.png"
+  },
+  {
+    "id": "av_070",
+    "name": "Mikasa Ackerman",
+    "category": "anime",
+    "image": "/avatars/av_070.png"
+  },
+  {
+    "id": "av_071",
+    "name": "Satoru Gojo",
+    "category": "anime",
+    "image": "/avatars/av_071.png"
+  },
+  {
+    "id": "av_072",
+    "name": "Ryomen Sukuna",
+    "category": "anime",
+    "image": "/avatars/av_072.png"
+  },
+  {
+    "id": "av_073",
+    "name": "Shinji Ikari",
+    "category": "anime",
+    "image": "/avatars/av_073.png"
+  },
+  {
+    "id": "av_074",
+    "name": "Asuka Langley",
+    "category": "anime",
+    "image": "/avatars/av_074.png"
+  },
+  {
+    "id": "av_075",
+    "name": "Spike Spiegel",
+    "category": "anime",
+    "image": "/avatars/av_075.png"
+  },
+  {
+    "id": "av_076",
+    "name": "Edward Elric",
+    "category": "anime",
+    "image": "/avatars/av_076.png"
+  },
+  {
+    "id": "av_077",
+    "name": "Alphonse Elric",
+    "category": "anime",
+    "image": "/avatars/av_077.png"
+  },
+  {
+    "id": "av_078",
+    "name": "Thorfinn",
+    "category": "anime",
+    "image": "/avatars/av_078.png"
+  },
+  {
+    "id": "av_079",
+    "name": "Kiyotaka Ayanokoji",
+    "category": "anime",
+    "image": "/avatars/av_079.png"
+  },
+  {
+    "id": "av_080",
+    "name": "Ken Kaneki",
+    "category": "anime",
+    "image": "/avatars/av_080.png"
+  },
+  {
+    "id": "av_081",
+    "name": "Night Sky",
+    "category": "aesthetic",
+    "image": "/avatars/av_081.png"
+  },
+  {
+    "id": "av_082",
+    "name": "Autumn Leaves",
+    "category": "aesthetic",
+    "image": "/avatars/av_082.png"
+  },
+  {
+    "id": "av_083",
+    "name": "Rainy City",
+    "category": "aesthetic",
+    "image": "/avatars/av_083.png"
+  },
+  {
+    "id": "av_084",
+    "name": "Lily Tears",
+    "category": "aesthetic",
+    "image": "/avatars/av_084.png"
+  },
+  {
+    "id": "av_085",
+    "name": "Sunset Ruins",
+    "category": "aesthetic",
+    "image": "/avatars/av_085.png"
+  },
+  {
+    "id": "av_086",
+    "name": "Cherry Blossom",
+    "category": "aesthetic",
+    "image": "/avatars/av_086.png"
+  },
+  {
+    "id": "av_087",
+    "name": "Blood Moon Ronin",
+    "category": "aesthetic",
+    "image": "/avatars/av_087.png"
+  },
+  {
+    "id": "av_088",
+    "name": "Snow Blindfold",
+    "category": "aesthetic",
+    "image": "/avatars/av_088.png"
+  },
+  {
+    "id": "av_089",
+    "name": "Spider Lily",
+    "category": "aesthetic",
+    "image": "/avatars/av_089.png"
+  },
+  {
+    "id": "av_090",
+    "name": "Crimson Umbrella",
+    "category": "aesthetic",
+    "image": "/avatars/av_090.png"
+  },
+  {
+    "id": "av_091",
+    "name": "Morning Breeze",
+    "category": "aesthetic",
+    "image": "/avatars/av_091.png"
+  },
+  {
+    "id": "av_092",
+    "name": "Shadow Cloak",
+    "category": "aesthetic",
+    "image": "/avatars/av_092.png"
+  },
+  {
+    "id": "av_093",
+    "name": "Desert Pillar",
+    "category": "aesthetic",
+    "image": "/avatars/av_093.png"
+  },
+  {
+    "id": "av_094",
+    "name": "Starry Headphones",
+    "category": "aesthetic",
+    "image": "/avatars/av_094.png"
+  },
+  {
+    "id": "av_095",
+    "name": "Winter Frost",
+    "category": "aesthetic",
+    "image": "/avatars/av_095.png"
+  },
+  {
+    "id": "av_096",
+    "name": "Raindrops Window",
+    "category": "aesthetic",
+    "image": "/avatars/av_096.png"
+  },
+  {
+    "id": "av_097",
+    "name": "Hydrangea Dream",
+    "category": "aesthetic",
+    "image": "/avatars/av_097.png"
+  },
+  {
+    "id": "av_098",
+    "name": "Dusk Reflection",
+    "category": "aesthetic",
+    "image": "/avatars/av_098.png"
+  },
+  {
+    "id": "av_099",
+    "name": "Windblown Lilies",
+    "category": "aesthetic",
+    "image": "/avatars/av_099.png"
+  },
+  {
+    "id": "av_100",
+    "name": "Moonlight Blade",
+    "category": "aesthetic",
+    "image": "/avatars/av_100.png"
+  },
+  {
+    "id": "av_101",
+    "name": "Pikachu",
+    "category": "pokemon",
+    "image": "/avatars/av_101.png"
+  },
+  {
+    "id": "av_102",
+    "name": "Charizard",
+    "category": "pokemon",
+    "image": "/avatars/av_102.png"
+  },
+  {
+    "id": "av_103",
+    "name": "Mewtwo",
+    "category": "pokemon",
+    "image": "/avatars/av_103.png"
+  },
+  {
+    "id": "av_104",
+    "name": "Gengar",
+    "category": "pokemon",
+    "image": "/avatars/av_104.png"
+  },
+  {
+    "id": "av_105",
+    "name": "Umbreon",
+    "category": "pokemon",
+    "image": "/avatars/av_105.png"
+  },
+  {
+    "id": "av_106",
+    "name": "Lucario",
+    "category": "pokemon",
+    "image": "/avatars/av_106.png"
+  },
+  {
+    "id": "av_107",
+    "name": "Greninja",
+    "category": "pokemon",
+    "image": "/avatars/av_107.png"
+  },
+  {
+    "id": "av_108",
+    "name": "Rayquaza",
+    "category": "pokemon",
+    "image": "/avatars/av_108.png"
+  },
+  {
+    "id": "av_109",
+    "name": "Eevee",
+    "category": "pokemon",
+    "image": "/avatars/av_109.png"
+  },
+  {
+    "id": "av_110",
+    "name": "Espeon",
+    "category": "pokemon",
+    "image": "/avatars/av_110.png"
+  },
+  {
+    "id": "av_111",
+    "name": "Vaporeon",
+    "category": "pokemon",
+    "image": "/avatars/av_111.png"
+  },
+  {
+    "id": "av_112",
+    "name": "Jolteon",
+    "category": "pokemon",
+    "image": "/avatars/av_112.png"
+  },
+  {
+    "id": "av_113",
+    "name": "Flareon",
+    "category": "pokemon",
+    "image": "/avatars/av_113.png"
+  },
+  {
+    "id": "av_114",
+    "name": "Leafeon",
+    "category": "pokemon",
+    "image": "/avatars/av_114.png"
+  },
+  {
+    "id": "av_115",
+    "name": "Glaceon",
+    "category": "pokemon",
+    "image": "/avatars/av_115.png"
+  },
+  {
+    "id": "av_116",
+    "name": "Sylveon",
+    "category": "pokemon",
+    "image": "/avatars/av_116.png"
+  },
+  {
+    "id": "av_117",
+    "name": "Dragonite",
+    "category": "pokemon",
+    "image": "/avatars/av_117.png"
+  },
+  {
+    "id": "av_118",
+    "name": "Snorlax",
+    "category": "pokemon",
+    "image": "/avatars/av_118.png"
+  },
+  {
+    "id": "av_119",
+    "name": "Blastoise (Hydro)",
+    "category": "pokemon",
+    "image": "/avatars/av_119.png"
+  },
+  {
+    "id": "av_120",
+    "name": "Arceus",
+    "category": "pokemon",
+    "image": "/avatars/av_120.png"
+  }
+]

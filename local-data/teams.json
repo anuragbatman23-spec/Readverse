@@ -1,0 +1,62 @@
+[
+  {
+    "id": "guild_1794198448080",
+    "name": "AkGuild",
+    "description": "To be A guid memver",
+    "avatarUrl": "/avatars/anime/11_satoru_gojo.png",
+    "category": "Reading Club",
+    "membersCount": 2,
+    "creatorId": "anurag.batman5@gmail.com",
+    "creatorName": "Anurag Kumar",
+    "followers": [
+      "anurag.batman5@gmail.com",
+      "anurag.batman23@gmail.com"
+    ],
+    "createdAt": "2026-11-09T04:27:28.080Z"
+  },
+  {
+    "id": "guild-shadow-monarchs",
+    "name": "Shadow Monarchs",
+    "membersCount": 24890,
+    "avatarUrl": "/avatars/anime/11_satoru_gojo.png",
+    "description": "Solo hunters, dungeon crawlers, and action manhwa theory crafters.",
+    "category": "Action Manhwa",
+    "followers": []
+  },
+  {
+    "id": "guild-tome-keepers",
+    "name": "Tome Keepers",
+    "membersCount": 18420,
+    "avatarUrl": "/avatars/anime/05_itachi_uchiha.png",
+    "description": "Webnovel bibliophiles analyzing deep lore, cultivation, and progression fantasy.",
+    "category": "Progression Fantasy",
+    "followers": []
+  },
+  {
+    "id": "team-feyenoord",
+    "name": "Feyenoord",
+    "membersCount": 37819,
+    "avatarUrl": "/community/team-feyenoord.jpg",
+    "description": "Rotterdam book guild and athletic community.",
+    "category": "General",
+    "followers": []
+  },
+  {
+    "id": "team-pec",
+    "name": "PEC Zwolle",
+    "membersCount": 13253,
+    "avatarUrl": "/community/team-pec.jpg",
+    "description": "Zwolle reading circle.",
+    "category": "General",
+    "followers": []
+  },
+  {
+    "id": "team-utrecht",
+    "name": "Utrecht",
+    "membersCount": 1023,
+    "avatarUrl": "/community/team-utrecht.jpg",
+    "description": "Utrecht literature fellowship.",
+    "category": "General",
+    "followers": []
+  }
+]

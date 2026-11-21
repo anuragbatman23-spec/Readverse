@@ -1,0 +1,42 @@
+[
+  {
+    "senderId": "105010979302132064465",
+    "senderName": "Anurag Kumar",
+    "senderAvatar": "https://lh3.googleusercontent.com/a/ACg8ocLdWQHZVl7l5G8L6knyk0jRJzGoExAD67bkHfxvGRi5o7xwceQ=s96-c",
+    "recipientId": "usr_1793996060699_vybbf",
+    "content": "hi",
+    "id": "msg_1794205912900",
+    "createdAt": "2026-11-09T06:31:52.900Z",
+    "isRead": false
+  },
+  {
+    "senderId": "105010979302132064465",
+    "senderName": "Anurag Kumar",
+    "senderAvatar": "https://lh3.googleusercontent.com/a/ACg8ocLdWQHZVl7l5G8L6knyk0jRJzGoExAD67bkHfxvGRi5o7xwceQ=s96-c",
+    "recipientId": "usr_1793996060699_vybbf",
+    "content": "hi",
+    "id": "msg_1794493534583",
+    "createdAt": "2026-11-12T14:25:34.583Z",
+    "isRead": false
+  },
+  {
+    "senderId": "105519956954674898026",
+    "senderName": "anurag",
+    "senderAvatar": "https://lh3.googleusercontent.com/a/ACg8ocLKwdXR9nOcWyBeN3TVUfzpAurnP3JDl1Pu-lgm6ulfN-rJ8Q=s96-c",
+    "recipientId": "usr_1793836824019_2ijnx",
+    "content": "hi",
+    "id": "msg_1794493541092",
+    "createdAt": "2026-11-12T14:25:41.092Z",
+    "isRead": false
+  },
+  {
+    "senderId": "anurag.batman5@gmail.com",
+    "senderName": "Anurag Kumar",
+    "senderAvatar": "https://lh3.googleusercontent.com/a/ACg8ocLdWQHZVl7l5G8L6knyk0jRJzGoExAD67bkHfxvGRi5o7xwceQ=s96-c",
+    "recipientId": "usr_1795183593824_ofyh4",
+    "content": "hello",
+    "id": "msg_1795184123839",
+    "createdAt": "2026-11-20T14:15:23.839Z",
+    "isRead": false
+  }
+]

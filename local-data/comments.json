@@ -1,0 +1,90 @@
+[
+  {
+    "id": "comment_1793996092047_k0b0",
+    "postId": "post_1793995767458_9b71",
+    "userId": "105519956954674898026",
+    "userName": "anurag",
+    "userAvatar": "https://lh3.googleusercontent.com/a/ACg8ocLKwdXR9nOcWyBeN3TVUfzpAurnP3JDl1Pu-lgm6ulfN-rJ8Q=s96-c",
+    "content": "hi",
+    "likes": 0,
+    "likedBy": [],
+    "createdAt": "2026-11-06T20:14:52.047Z"
+  },
+  {
+    "id": "comment_1793996106216_9hsj",
+    "postId": "post_1793995767458_9b71",
+    "userId": "105010979302132064465",
+    "userName": "Anurag Kumar",
+    "userAvatar": "https://lh3.googleusercontent.com/a/ACg8ocLdWQHZVl7l5G8L6knyk0jRJzGoExAD67bkHfxvGRi5o7xwceQ=s96-c",
+    "content": "hi anurag",
+    "likes": 0,
+    "likedBy": [],
+    "createdAt": "2026-11-06T20:15:06.216Z"
+  },
+  {
+    "id": "comment_1794279455671_7ror",
+    "postId": "post_1794000769144_nibo",
+    "userId": "105519956954674898026",
+    "userName": "anurag",
+    "userAvatar": "https://lh3.googleusercontent.com/a/ACg8ocLKwdXR9nOcWyBeN3TVUfzpAurnP3JDl1Pu-lgm6ulfN-rJ8Q=s96-c",
+    "content": "Sahi Baath hai",
+    "likes": 0,
+    "likedBy": [],
+    "createdAt": "2026-11-10T02:57:35.671Z"
+  },
+  {
+    "id": "comment_1794287142245_lqge",
+    "postId": "post_1794287112031_azrb",
+    "userId": "105519956954674898026",
+    "userName": "anurag",
+    "userAvatar": "https://lh3.googleusercontent.com/a/ACg8ocLKwdXR9nOcWyBeN3TVUfzpAurnP3JDl1Pu-lgm6ulfN-rJ8Q=s96-c",
+    "content": "i dont know that either",
+    "likes": 0,
+    "likedBy": [],
+    "createdAt": "2026-11-10T05:05:42.245Z"
+  },
+  {
+    "id": "comment_1794287183615_coty",
+    "postId": "post_1794287112031_azrb",
+    "userId": "105519956954674898026",
+    "userName": "anurag",
+    "userAvatar": "https://lh3.googleusercontent.com/a/ACg8ocLKwdXR9nOcWyBeN3TVUfzpAurnP3JDl1Pu-lgm6ulfN-rJ8Q=s96-c",
+    "content": "maybe u are just unlucky",
+    "likes": 0,
+    "likedBy": [],
+    "createdAt": "2026-11-10T05:06:23.615Z"
+  },
+  {
+    "id": "comment_1795184071127_n6vv",
+    "postId": "post_1795184019785_psgo",
+    "userId": "usr_1795183593824_ofyh4",
+    "userName": "ak",
+    "userAvatar": "/avatars/av_058.png",
+    "content": "ha ma deepy",
+    "likes": 0,
+    "likedBy": [],
+    "createdAt": "2026-11-20T14:14:31.127Z"
+  },
+  {
+    "id": "comment_1795184091732_g2sz",
+    "postId": "post_1795184019785_psgo",
+    "userId": "105010979302132064465",
+    "userName": "Anurag Kumar",
+    "userAvatar": "https://lh3.googleusercontent.com/a/ACg8ocLdWQHZVl7l5G8L6knyk0jRJzGoExAD67bkHfxvGRi5o7xwceQ=s96-c",
+    "content": "deepy",
+    "likes": 0,
+    "likedBy": [],
+    "createdAt": "2026-11-20T14:14:51.732Z"
+  },
+  {
+    "id": "comment_1795184340204_a9kg",
+    "postId": "post_1795184270444_cpfd",
+    "userId": "105010979302132064465",
+    "userName": "Anurag Kumar",
+    "userAvatar": "https://lh3.googleusercontent.com/a/ACg8ocLdWQHZVl7l5G8L6knyk0jRJzGoExAD67bkHfxvGRi5o7xwceQ=s96-c",
+    "content": "kya baat hai vah vah",
+    "likes": 0,
+    "likedBy": [],
+    "createdAt": "2026-11-20T14:19:00.204Z"
+  }
+]

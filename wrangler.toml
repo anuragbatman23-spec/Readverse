@@ -1,0 +1,16 @@
+name = "readverse"
+main = ".open-next/worker.js"
+compatibility_date = "2024-12-01"
+compatibility_flags = ["nodejs_compat"]
+
+assets = { directory = ".open-next/assets", binding = "ASSETS" }
+
+[[d1_databases]]
+binding = "DB"
+database_name = "readverse-db"
+database_id = "96734247-386c-4736-9063-d4a6c26e87ff"
+
+[vars]
+CLOUDFLARE_ACCOUNT_ID = "a6e4d829cbf36b3c65a818af2520c8b6"
+CLOUDFLARE_D1_DATABASE_ID = "96734247-386c-4736-9063-d4a6c26e87ff"
+NEXTAUTH_SECRET = "readverse_secret_production_session_key_98765"

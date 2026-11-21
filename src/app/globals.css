@@ -1,27 +1,310 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --font-heading: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --background: #0a0b0f;
+  --foreground: #f3f4f6;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body);
+  overflow-x: clip;
+  margin: 0;
+  padding: 0;
+  -webkit-overflow-scrolling: touch;
+}
+
+h1, h2, h3, .spotlight-title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+}
+
+button, .book-title {
+  font-family: var(--font-heading);
+  font-weight: 600;
+}
+
+/* Fast 0.5s Loading Spinner & Skeleton Animations */
+.animate-spin {
+  animation: spin 0.5s linear infinite !important;
+}
+
+.animate-pulse {
+  animation: pulse 0.5s cubic-bezier(0.4, 0, 0.6, 1) infinite !important;
+}
+
+/* Dedicated Hardware-Accelerated Static Background Layer for Chromium/Vivaldi & Gecko/Zen */
+.fixed-aura-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+  background-color: #0a0b0f;
+  background-image: 
+    radial-gradient(circle at 10% 10%, rgba(6, 182, 212, 0.05) 0%, transparent 40%),
+    radial-gradient(circle at 90% 12%, rgba(192, 132, 252, 0.05) 0%, transparent 40%);
+  transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  contain: strict;
+}
+
+/* Card Virtualization & layout containment */
+.cv-card {
+  contain: layout paint;
+}
+
+/* Section Virtualization: skips off-screen horizontal shelves during vertical scroll */
+.cv-shelf-section {
+  content-visibility: auto;
+  contain-intrinsic-size: 1000px 420px;
+}
+
+/* Replace expensive repetitive backdrop-filter passes with zero-repaint high-contrast glass globally */
+.card-badge-blur {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background-color: rgba(14, 16, 28, 0.95) !important;
+}
+
+/* 3D Dock Card Hover Animation - Uses stationary wrapper to eliminate 100% of jitter/vibration */
+.dock-card-wrapper {
+  position: relative;
+  pointer-events: auto !important;
+  height: 100%;
+}
+
+.dock-card-3d {
+  position: relative;
+  pointer-events: auto !important;
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.2s ease;
+  border-width: 2px !important;
+  transform: translateZ(0);
+}
+
+/* Hover triggered on stationary wrapper */
+.dock-card-wrapper:hover .dock-card-3d,
+.dock-card-3d:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.9), 0 0 24px var(--hover-glow, rgba(168, 85, 247, 0.4));
+  z-index: 50 !important;
+  will-change: transform;
+}
+
+/* Suppress all card hover lifts and costly shadow recalculations while actively scrolling horizontally */
+.shelf-is-scrolling .dock-card-wrapper,
+.shelf-is-scrolling .dock-card-3d {
+  pointer-events: none !important;
+  transform: none !important;
+  box-shadow: none !important;
+  transition: none !important;
+}
+
+@media (max-width: 640px) {
+  .dock-card-wrapper:hover .dock-card-3d,
+  .dock-card-3d:hover {
+    transform: translateY(-6px) scale(1.01);
+  }
+}
+
+.cv-post {
+  content-visibility: auto;
+  contain-intrinsic-size: 600px 240px;
+}
+
+.cv-reward {
+  content-visibility: auto;
+  contain-intrinsic-size: 350px 440px;
+}
+
+/* Custom Colorful Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(10, 11, 18, 0.6);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #6366f1, #a855f7, #ec4899);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #818cf8, #c084fc, #f472b6);
+}
+
+/* Lightweight Solid Glass Cards (Zero blur overhead) */
+.glass-panel {
+  background: rgba(16, 18, 28, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-card {
+  background: rgba(16, 18, 28, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+/* Multi-colored Gradient Text */
+.gradient-text-rainbow {
+  background: linear-gradient(135deg, #38bdf8 0%, #818cf8 25%, #c084fc 50%, #f472b6 75%, #fb923c 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Ambient chromatic glow pulsing */
+@keyframes search-border-pulse {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(6, 182, 212, 0.25), 0 0 35px rgba(168, 85, 247, 0.15), 0 10px 30px rgba(0, 0, 0, 0.8);
+    border-color: rgba(255, 255, 255, 0.18);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(6, 182, 212, 0.5), 0 0 50px rgba(168, 85, 247, 0.35), 0 12px 35px rgba(0, 0, 0, 0.9);
+    border-color: rgba(56, 189, 248, 0.55);
+  }
+}
+
+.animate-search-glow {
+  animation: search-border-pulse 4s ease-in-out infinite;
+}
+
+.gradient-text-sunset {
+  background: linear-gradient(135deg, #fbbf24 0%, #f97316 50%, #f43f5e 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gradient-text-aurora {
+  background: linear-gradient(135deg, #2dd4bf 0%, #38bdf8 50%, #818cf8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ==========================================================================
+   ADAPTIVE CHROMIUM PERFORMANCE OPTIMIZATIONS
+   Dynamically applied when running on Blink/Chromium (Chrome, Edge, Brave, etc.)
+   ========================================================================== */
+.is-chromium {
+  text-rendering: optimizeSpeed !important;
+}
+
+.is-chromium .dock-card-3d {
+  will-change: auto !important;
+}
+
+.is-chromium .dock-card-wrapper:hover .dock-card-3d,
+.is-chromium .dock-card-3d:hover {
+  will-change: transform !important;
+}
+
+/* Replace expensive repetitive backdrop-filter passes with zero-repaint high-contrast glass */
+.is-chromium .card-badge-blur {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background-color: rgba(14, 16, 28, 0.95) !important;
+}
+
+/* Isolate fixed navigation dock to prevent compositor full-page invalidation */
+.is-chromium .bottom-nav-dock {
+  transform: translate3d(-50%, 0, 0);
+  will-change: transform;
+}
+
+/* Disable main-thread box-shadow animation loops in Chromium */
+.is-chromium .animate-search-glow {
+  animation: none !important;
+  border-color: rgba(56, 189, 248, 0.4) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6) !important;
+}
+.is-chromium .animate-search-glow:focus-within {
+  border-color: rgba(56, 189, 248, 0.75) !important;
+  box-shadow: 0 0 24px rgba(6, 182, 212, 0.35) !important;
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .thin-scrollbar::-webkit-scrollbar {
+    width: 4px;
+  }
+  .thin-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .thin-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 9999px;
+  }
+  .thin-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.4);
+  }
+  .thin-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+  }
+
+  @keyframes hoverCardPop {
+    0% {
+      opacity: 0;
+      transform: scale(0.72) translateY(8px);
+    }
+    60% {
+      opacity: 1;
+      transform: scale(1.05) translateY(-2px);
+    }
+    82% {
+      transform: scale(0.98) translateY(1px);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  .animate-hover-card-pop {
+    animation: hoverCardPop 0.32s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+  }
+
+  @keyframes shimmer {
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  .animate-shimmer {
+    animation: shimmer 1.8s infinite;
   }
 }

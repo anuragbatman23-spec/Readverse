@@ -1,0 +1,72 @@
+{
+  "a0732eb2-1264-4228-b118-29373cf584ee:::ch_wc-01J76XZ10EPAC4FQ7PGZZ53CVV": [
+    {
+      "id": "spot-1794745021690-2mcg2",
+      "panelIndex": 1,
+      "yPercent": 75.6,
+      "comments": [
+        {
+          "id": "c-1794745021690-4skj6",
+          "author": "anurag",
+          "text": "lag gaye",
+          "likes": 2,
+          "likedBy": [
+            "anurag.batman5@gmail.com",
+            "anurag.batman23@gmail.com"
+          ],
+          "isLiked": true,
+          "createdAt": "Just now",
+          "userEmail": "anurag.batman23@gmail.com"
+        }
+      ]
+    }
+  ],
+  "local-file-elon_musk__walter_isaacson___z-library.sk__1lib.sk__z-lib.sk_.epub:::ch_ln-ch-6": [
+    {
+      "id": "spot-1795184765503-tnyzw",
+      "panelIndex": 0,
+      "yPercent": 6.6,
+      "comments": [
+        {
+          "id": "c-1795185581116-k17q5",
+          "author": "ak",
+          "avatarUrl": "/avatars/av_058.png",
+          "text": "bahut ammer tha iss ka baap",
+          "likes": 1,
+          "likedBy": [
+            "admin@123"
+          ],
+          "isLiked": true,
+          "createdAt": "Just now",
+          "userEmail": "admin@123"
+        },
+        {
+          "id": "c-1795185573014-80aax",
+          "author": "ak",
+          "avatarUrl": "/avatars/av_058.png",
+          "text": "kha raha tha na ma",
+          "likes": 1,
+          "likedBy": [
+            "admin@123"
+          ],
+          "isLiked": true,
+          "createdAt": "Just now",
+          "userEmail": "admin@123"
+        },
+        {
+          "id": "c-1795184765503-4xj2q",
+          "author": "Anurag Kumar",
+          "avatarUrl": "/avatars/av_025.png",
+          "text": "dehka, jo mai khe raha tha, tu bol raha tha iska baap amer tha",
+          "likes": 1,
+          "likedBy": [
+            "anurag.batman5@gmail.com"
+          ],
+          "isLiked": true,
+          "createdAt": "Just now",
+          "userEmail": "anurag.batman5@gmail.com"
+        }
+      ]
+    }
+  ]
+}
