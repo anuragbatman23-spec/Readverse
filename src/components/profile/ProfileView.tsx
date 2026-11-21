@@ -448,7 +448,12 @@ export const ProfileView: React.FC = () => {
       if (res.ok) {
         const data = await res.json();
         if (data.book) {
-          finalBook = { ...data.book, id: canonicalId };
+          finalBook = { ...data.book, id: data.book.id || canonicalId };
+          if (data.gdriveFileId) {
+            try {
+              localStorage.setItem(`readverse_book_${finalBook.id}`, JSON.stringify(finalBook));
+            } catch {}
+          }
         }
       }
 

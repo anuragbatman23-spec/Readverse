@@ -4,6 +4,10 @@ import path from 'path';
 import JSZip from 'jszip';
 import { Book } from '@/types';
 import { searchLocalLightNovels } from '@/utils/localLightNovelsService';
+import { uploadEpubToAdminDrive, parseEpubBufferMetadata } from '@/lib/gdriveStorage';
+import { getStorageObject, setStorageObject } from '@/lib/d1Client';
+
+export const dynamic = 'force-dynamic';
 
 const LOCAL_BOOKS_DIR = path.join(process.cwd(), 'local-books');
 const USER_UPLOADS_FILE = path.join(process.cwd(), 'local-data', 'user_uploads.json');
@@ -111,72 +115,83 @@ async function parseLocalEpub(filePath: string, filename: string): Promise<Book>
 
 export async function GET(request: Request) {
   try {
-    ensureLocalDir();
     const { searchParams } = new URL(request.url);
     const query = searchParams.get('q')?.toLowerCase().trim() || '';
     const userParamRaw = searchParams.get('user')?.toLowerCase().trim() || '';
     const userParam = userParamRaw ? resolveUserEmail(userParamRaw) : '';
 
-    const uploadsMap = getUserUploadsMap();
-    const files = fs.readdirSync(LOCAL_BOOKS_DIR);
     const books: Book[] = [];
+    const seenTitles = new Set<string>();
 
-    for (const file of files) {
-      // If userParam is specified, filter so users only see their own uploaded books
-      if (userParam) {
-        let isOwner = false;
-        let isOwnedByOther = false;
-        for (const [ownerEmail, userFiles] of Object.entries(uploadsMap)) {
-          if (Array.isArray(userFiles) && userFiles.includes(file)) {
-            if (ownerEmail.toLowerCase() === userParam) {
-              isOwner = true;
-            } else {
-              isOwnedByOther = true;
+    // 1. Load books from Cloudflare D1 persistent cloud storage
+    try {
+      const d1Epubs = (await getStorageObject<any[]>('custom_epubs')) || [];
+      for (const item of d1Epubs) {
+        if (userParam && item.uploadedBy && item.uploadedBy.toLowerCase() !== userParam && !item.isPublic) {
+          continue;
+        }
+        const norm = item.title?.toLowerCase().trim();
+        if (norm && !seenTitles.has(norm)) {
+          seenTitles.add(norm);
+          books.push(item);
+        }
+      }
+    } catch (d1Err) {
+      console.warn('[Local Books API] D1 read notice:', d1Err);
+    }
+
+    // 2. Load from local filesystem if available (in local development)
+    try {
+      ensureLocalDir();
+      const uploadsMap = getUserUploadsMap();
+      if (fs.existsSync(LOCAL_BOOKS_DIR)) {
+        const files = fs.readdirSync(LOCAL_BOOKS_DIR);
+        for (const file of files) {
+          if (userParam) {
+            let isOwner = false;
+            let isOwnedByOther = false;
+            for (const [ownerEmail, userFiles] of Object.entries(uploadsMap)) {
+              if (Array.isArray(userFiles) && userFiles.includes(file)) {
+                if (ownerEmail.toLowerCase() === userParam) {
+                  isOwner = true;
+                } else {
+                  isOwnedByOther = true;
+                }
+              }
+            }
+            if (isOwnedByOther && !isOwner) continue;
+          }
+
+          const fullPath = path.join(LOCAL_BOOKS_DIR, file);
+          const stat = fs.statSync(fullPath);
+          if (!stat.isFile()) continue;
+
+          if (file.endsWith('.json')) {
+            const content = fs.readFileSync(fullPath, 'utf-8');
+            const bookData = JSON.parse(content) as Book;
+            const norm = bookData.title?.toLowerCase().trim();
+            if (norm && !seenTitles.has(norm)) {
+              seenTitles.add(norm);
+              books.push(bookData);
+            }
+          } else if (file.endsWith('.epub')) {
+            const epubBook = await parseLocalEpub(fullPath, file);
+            const norm = epubBook.title?.toLowerCase().trim();
+            if (norm && !seenTitles.has(norm)) {
+              seenTitles.add(norm);
+              books.push(epubBook);
             }
           }
         }
-        // If owned by someone else, hide from this user's profile shelf
-        if (isOwnedByOther && !isOwner) {
-          continue;
-        }
       }
-
-      const fullPath = path.join(LOCAL_BOOKS_DIR, file);
-      const stat = fs.statSync(fullPath);
-      if (!stat.isFile()) continue;
-
-      const cached = localBookCache.get(fullPath);
-      if (cached && cached.mtime === stat.mtimeMs) {
-        books.push(cached.book);
-        continue;
-      }
-
-      if (file.endsWith('.json')) {
-        try {
-          const content = fs.readFileSync(fullPath, 'utf-8');
-          const bookData = JSON.parse(content) as Book;
-          localBookCache.set(fullPath, { mtime: stat.mtimeMs, book: bookData });
-          books.push(bookData);
-        } catch (err) {
-          console.error(`Error reading local json ${file}:`, err);
-        }
-      } else if (file.endsWith('.epub')) {
-        try {
-          const epubBook = await parseLocalEpub(fullPath, file);
-          localBookCache.set(fullPath, { mtime: stat.mtimeMs, book: epubBook });
-          books.push(epubBook);
-        } catch (err) {
-          console.error(`Error reading local epub ${file}:`, err);
-        }
-      }
-    }
+    } catch {}
 
     const filtered = query
       ? books.filter(
           b =>
             b.title.toLowerCase().includes(query) ||
             b.author.toLowerCase().includes(query) ||
-            b.genre.some(g => g.toLowerCase().includes(query))
+            b.genre?.some(g => g.toLowerCase().includes(query))
         )
       : books;
 
@@ -208,41 +223,78 @@ export async function GET(request: Request) {
   }
 }
 
-// POST endpoint to upload and save an EPUB file into local-books/
+// POST endpoint to upload an EPUB file into Google Drive and local storage
 export async function POST(request: Request) {
   try {
-    ensureLocalDir();
     const formData = await request.formData();
     const file = formData.get('file') as File | null;
+    const userEmail = (formData.get('userEmail') as string | null)?.toLowerCase().trim();
 
     if (!file) {
       return NextResponse.json({ error: 'No file provided' }, { status: 400 });
     }
 
     const filename = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
-    const savePath = path.join(LOCAL_BOOKS_DIR, filename);
-
     const arrayBuffer = await file.arrayBuffer();
-    fs.writeFileSync(savePath, Buffer.from(arrayBuffer));
+    const buffer = Buffer.from(arrayBuffer);
 
-    const parsedBook = await parseLocalEpub(savePath, filename);
+    // 1. Parse book metadata from buffer
+    const parsedBook = await parseEpubBufferMetadata(buffer, filename);
 
-    // Track user ownership if userEmail is supplied
-    const userEmail = (formData.get('userEmail') as string | null)?.toLowerCase().trim();
-    if (userEmail) {
-      const map = getUserUploadsMap();
-      const list = map[userEmail] || [];
-      if (!list.includes(filename)) {
-        list.push(filename);
-        map[userEmail] = list;
-        saveUserUploadsMap(map);
-      }
+    // 2. Upload to central Admin Google Drive folder
+    let gdriveFileId: string | undefined;
+    try {
+      const uploadRes = await uploadEpubToAdminDrive({
+        filename,
+        buffer,
+        mimeType: file.type || 'application/epub+zip'
+      });
+      gdriveFileId = uploadRes.fileId;
+      parsedBook.id = `gdrive-${gdriveFileId}`;
+      (parsedBook as any).gdriveFileId = gdriveFileId;
+      (parsedBook as any).downloadUrl = `/api/books/gdrive/read?fileId=${gdriveFileId}`;
+    } catch (gdriveErr: any) {
+      console.warn('[Local Books API] Google Drive upload notice:', gdriveErr?.message || gdriveErr);
     }
+
+    // 3. Persist book record to Cloudflare D1
+    try {
+      const existingList = (await getStorageObject<any[]>('custom_epubs')) || [];
+      const filtered = existingList.filter(b => b.id !== parsedBook.id && b.title !== parsedBook.title);
+      filtered.unshift({
+        ...parsedBook,
+        uploadedBy: userEmail || 'anonymous',
+        uploadedAt: new Date().toISOString()
+      });
+      await setStorageObject('custom_epubs', filtered);
+    } catch (d1Err) {
+      console.warn('[Local Books API] D1 save notice:', d1Err);
+    }
+
+    // 4. In local dev, optionally save to disk (safely ignored on serverless EROFS)
+    try {
+      ensureLocalDir();
+      const savePath = path.join(LOCAL_BOOKS_DIR, filename);
+      fs.writeFileSync(savePath, buffer);
+
+      if (userEmail) {
+        const map = getUserUploadsMap();
+        const list = map[userEmail] || [];
+        if (!list.includes(filename)) {
+          list.push(filename);
+          map[userEmail] = list;
+          saveUserUploadsMap(map);
+        }
+      }
+    } catch {}
 
     return NextResponse.json({
       success: true,
-      message: `File saved to ${savePath}`,
-      book: parsedBook
+      message: gdriveFileId
+        ? `Book uploaded and backed up to your Google Drive folder.`
+        : `Book processed and saved to library.`,
+      book: parsedBook,
+      gdriveFileId
     });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Unknown error';

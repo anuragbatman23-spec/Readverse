@@ -258,8 +258,15 @@ function ReaderContent() {
 
     // 4. Resolve via API according to ID prefix
     const resolveFromApi = async () => {
-      // A. Local Books / Light Novels / Archive.org Stream
-      if (bookId.startsWith('local-') || rawId.startsWith('local-') || bookId.startsWith('archive-ln-') || rawId.startsWith('archive-ln-')) {
+      // A. Local Books / Light Novels / Archive.org Stream / Google Drive Cloud
+      if (
+        bookId.startsWith('local-') ||
+        rawId.startsWith('local-') ||
+        bookId.startsWith('archive-ln-') ||
+        rawId.startsWith('archive-ln-') ||
+        bookId.startsWith('gdrive-') ||
+        rawId.startsWith('gdrive-')
+      ) {
         try {
           const localRes = await fetch(`/api/books/local/read?bookId=${encodeURIComponent(bookId)}`);
           if (localRes.ok) {
@@ -282,6 +289,7 @@ function ReaderContent() {
         bookId.startsWith('wn-') ||
         bookId.startsWith('local-') ||
         bookId.startsWith('archive-ln-') ||
+        bookId.startsWith('gdrive-') ||
         bookId.startsWith('gutenberg-') ||
         bookId.startsWith('se-') ||
         /^\d+$/.test(bookId) ||

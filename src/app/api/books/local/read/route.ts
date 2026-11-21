@@ -4,6 +4,8 @@ import path from 'path';
 import { Book } from '@/types';
 import { resolveSafeLNPath, parseLocalLNEpubChapters } from '@/utils/localLightNovelsService';
 import { parseArchiveEpubChapters } from '@/utils/archiveOrgService';
+import { downloadEpubFromAdminDrive, parseEpubBufferToChapters, parseEpubBufferMetadata } from '@/lib/gdriveStorage';
+import { getStorageObject } from '@/lib/d1Client';
 
 const LOCAL_BOOKS_DIR = path.join(process.cwd(), 'local-books');
 
@@ -106,13 +108,51 @@ export async function GET(request: Request) {
       }
     }
 
-    // 3. Check if it's an EPUB file in local-books/ (e.g. "local-file-my_book.epub")
+    // 3. Check if it's a Google Drive stored book (e.g. "gdrive-1AbCdEf...")
+    if (bookId.startsWith('gdrive-')) {
+      const fileId = bookId.replace('gdrive-', '');
+      try {
+        const { buffer } = await downloadEpubFromAdminDrive(fileId);
+        const chapters = await parseEpubBufferToChapters(buffer);
+        const meta = await parseEpubBufferMetadata(buffer, `book_${fileId}.epub`);
+        const book: Partial<Book> = {
+          id: bookId,
+          title: meta.title,
+          category: 'book',
+          coverImage: meta.coverImage,
+          chapters
+        };
+        return NextResponse.json(
+          { chapters, book },
+          { headers: { 'Cache-Control': 'public, max-age=31536000, s-maxage=31536000, immutable' } }
+        );
+      } catch (err: any) {
+        console.error('[GDrive Read] Failed to stream from Google Drive:', err);
+        return NextResponse.json({ error: `Failed to stream from Google Drive: ${err.message}` }, { status: 502 });
+      }
+    }
+
+    // 4. Check if it's an EPUB file in local-books/ (e.g. "local-file-my_book.epub")
     if (bookId.startsWith('local-file-')) {
       const decodedFilename = decodeURIComponent(bookId.replace('local-file-', ''));
       const filePath = path.join(LOCAL_BOOKS_DIR, decodedFilename);
 
       if (!fs.existsSync(filePath)) {
-        // Fallback check in LN directory as well
+        // Fallback 1: Check Cloudflare D1 for Google Drive cloud link
+        try {
+          const d1Epubs = (await getStorageObject<any[]>('custom_epubs')) || [];
+          const found = d1Epubs.find(b => b.id === bookId || b.id === `gdrive-${b.gdriveFileId}`);
+          if (found?.gdriveFileId) {
+            const { buffer } = await downloadEpubFromAdminDrive(found.gdriveFileId);
+            const chapters = await parseEpubBufferToChapters(buffer);
+            return NextResponse.json(
+              { chapters, book: { ...found, chapters } },
+              { headers: { 'Cache-Control': 'public, max-age=31536000, s-maxage=31536000, immutable' } }
+            );
+          }
+        } catch {}
+
+        // Fallback 2: Check LN directory as well
         const lnFallback = resolveSafeLNPath(decodedFilename);
         if (lnFallback && fs.existsSync(lnFallback)) {
           const chapters = await parseLocalLNEpubChapters(lnFallback);
@@ -125,9 +165,9 @@ export async function GET(request: Request) {
             chapters
           };
           return NextResponse.json(
-          { chapters, book },
-          { headers: { 'Cache-Control': 'public, max-age=31536000, s-maxage=31536000, immutable' } }
-        );
+            { chapters, book },
+            { headers: { 'Cache-Control': 'public, max-age=31536000, s-maxage=31536000, immutable' } }
+          );
         }
         return NextResponse.json({ error: `File ${decodedFilename} not found` }, { status: 404 });
       }
