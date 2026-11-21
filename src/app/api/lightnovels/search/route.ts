@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { searchLNWebnovels, ACTIVE_WEBNOVEL_SOURCES } from '@/utils/lnreaderService';
 import { FAMOUS_LIGHT_NOVELS } from '@/data/famousCatalog';
 import { searchLocalLightNovels } from '@/utils/localLightNovelsService';
+import { searchArchiveLightNovels } from '@/utils/archiveOrgService';
 import { Book } from '@/types';
 
 // In-memory cache for live searches (TTL: 5 minutes)
@@ -50,7 +51,7 @@ export async function GET(request: Request) {
     );
   }
 
-  // 1. Search locally stored light novels first (offline resilient, instant, 100% full chapters)
+  // 1. Search locally stored light novels (if on local dev)
   let localMatches: Book[] = [];
   try {
     localMatches = await searchLocalLightNovels(query, 25);
@@ -58,7 +59,17 @@ export async function GET(request: Request) {
     console.warn('Local light novel search warning:', localErr);
   }
 
-  // 2. Query live online light novel sources with timeout and failure tolerance
+  // 2. Search Archive.org 5,846 Light Novel Library
+  let archiveMatches: Book[] = [];
+  try {
+    archiveMatches = await searchArchiveLightNovels(query, 30);
+  } catch (archErr) {
+    console.warn('Archive.org light novel search warning:', archErr);
+  }
+
+  const combinedLibraryMatches = [...localMatches, ...archiveMatches];
+
+  // 3. Query live online light novel sources with timeout and failure tolerance
   let liveNovels: Book[] = [];
   let liveError = false;
 
@@ -67,7 +78,7 @@ export async function GET(request: Request) {
   } catch (err: unknown) {
     liveError = true;
     const errorMsg = err instanceof Error ? err.message : 'Unknown source error';
-    console.warn('Live light novel source failed/crashed, falling back to local storage:', errorMsg);
+    console.warn('Live light novel source failed/crashed, falling back to archive:', errorMsg);
   }
 
   // Mark category as lightnovel
@@ -87,11 +98,11 @@ export async function GET(request: Request) {
 
   // If live source crashed out or timed out or returned no results:
   if (liveError || categorizedLive.length === 0) {
-    if (localMatches.length > 0) {
-      lightnovelSearchCache.set(cacheKey, { timestamp: Date.now(), books: localMatches });
+    if (combinedLibraryMatches.length > 0) {
+      lightnovelSearchCache.set(cacheKey, { timestamp: Date.now(), books: combinedLibraryMatches });
       return NextResponse.json({
-        books: localMatches,
-        activeSources: ['Local Offline Storage (Auto-Fallback)'],
+        books: combinedLibraryMatches,
+        activeSources: ['Archive.org 5,846 Library', 'Local Storage'],
         isFallback: true
       });
     }
@@ -111,11 +122,11 @@ export async function GET(request: Request) {
     });
   }
 
-  // If live sources responded: Merge local matches at the top (fastest, most reliable) + live results
+  // Merge library matches at the top (fastest, authentic official volumes) + live results
   const seenIds = new Set<string>();
   const merged: Book[] = [];
 
-  for (const b of [...localMatches, ...curatedMatches, ...categorizedLive]) {
+  for (const b of [...combinedLibraryMatches, ...curatedMatches, ...categorizedLive]) {
     if (!seenIds.has(b.id)) {
       seenIds.add(b.id);
       merged.push(b);
@@ -127,7 +138,7 @@ export async function GET(request: Request) {
   return NextResponse.json(
     {
       books: merged,
-      activeSources: ['Local Offline Storage', ...ACTIVE_WEBNOVEL_SOURCES.map(s => s.name)]
+      activeSources: ['Archive.org Library (5,846 Books)', ...ACTIVE_WEBNOVEL_SOURCES.map(s => s.name)]
     },
     {
       headers: {

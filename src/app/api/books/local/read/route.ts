@@ -3,6 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import { Book } from '@/types';
 import { resolveSafeLNPath, parseLocalLNEpubChapters } from '@/utils/localLightNovelsService';
+import { parseArchiveEpubChapters } from '@/utils/archiveOrgService';
 
 const LOCAL_BOOKS_DIR = path.join(process.cwd(), 'local-books');
 
@@ -15,27 +16,65 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'bookId is required' }, { status: 400 });
     }
 
-    // 1. Check if it's a locally stored Light Novel (e.g. "local-ln-Overlord%2FOverlord...")
+    // 1. Check if it's an Archive.org stream (e.g. "archive-ln-...")
+    if (bookId.startsWith('archive-ln-')) {
+      const relPath = decodeURIComponent(bookId.replace('archive-ln-', ''));
+      try {
+        const chapters = await parseArchiveEpubChapters(relPath);
+        const fileName = relPath.split('/').pop() || relPath;
+        const cleanTitle = fileName.replace(/\.epub$/i, '').replace(/\[[^\]]+\]/g, '').trim();
+
+        const book: Partial<Book> = {
+          id: bookId,
+          title: cleanTitle,
+          category: 'lightnovel',
+          chapters
+        };
+
+        return NextResponse.json({ chapters, book });
+      } catch (err: any) {
+        console.error('Archive.org stream error:', err);
+        return NextResponse.json({ error: `Failed to stream light novel from Archive.org: ${err.message}` }, { status: 502 });
+      }
+    }
+
+    // 2. Check if it's a locally stored Light Novel (e.g. "local-ln-Overlord%2FOverlord...")
     if (bookId.startsWith('local-ln-')) {
       const relPath = decodeURIComponent(bookId.replace('local-ln-', ''));
       const filePath = resolveSafeLNPath(relPath);
 
-      if (!filePath || !fs.existsSync(filePath)) {
-        return NextResponse.json({ error: `Light novel file not found: ${relPath}` }, { status: 404 });
+      if (filePath && fs.existsSync(filePath)) {
+        const chapters = await parseLocalLNEpubChapters(filePath);
+        const fileName = path.basename(filePath);
+        const cleanTitle = fileName.replace(/\.epub$/i, '').replace(/\s*\[[^\]]+\]/g, '').trim();
+
+        const book: Partial<Book> = {
+          id: bookId,
+          title: cleanTitle,
+          category: 'lightnovel',
+          chapters
+        };
+
+        return NextResponse.json({ chapters, book });
       }
 
-      const chapters = await parseLocalLNEpubChapters(filePath);
-      const fileName = path.basename(filePath);
-      const cleanTitle = fileName.replace(/\.epub$/i, '').replace(/\s*\[[^\]]+\]/g, '').trim();
+      // Cloud fallback: If file is missing locally (e.g. on Vercel), stream from Archive.org
+      try {
+        const chapters = await parseArchiveEpubChapters(relPath);
+        const fileName = relPath.split('/').pop() || relPath;
+        const cleanTitle = fileName.replace(/\.epub$/i, '').replace(/\[[^\]]+\]/g, '').trim();
 
-      const book: Partial<Book> = {
-        id: bookId,
-        title: cleanTitle,
-        category: 'lightnovel',
-        chapters
-      };
+        const book: Partial<Book> = {
+          id: bookId,
+          title: cleanTitle,
+          category: 'lightnovel',
+          chapters
+        };
 
-      return NextResponse.json({ chapters, book });
+        return NextResponse.json({ chapters, book });
+      } catch (cloudErr: any) {
+        return NextResponse.json({ error: `Light novel file not found locally or on Archive.org: ${relPath}` }, { status: 404 });
+      }
     }
 
     // 2. Check if it's a JSON book file (e.g. "local-atomic-habits")
